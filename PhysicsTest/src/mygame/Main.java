@@ -1,5 +1,6 @@
 package mygame;
 
+import Web.DemoApplication;
 import states.PlayerInputState;
 import controls.CameraControl;
 import controls.SpaceshipControl;
@@ -19,6 +20,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
+import java.io.IOException;
 import states.GameUIState;
 import states.MainMenuAppState;
 
@@ -120,6 +122,15 @@ public class Main extends SimpleApplication {
         mainMenu = new MainMenuAppState();
         gameUI = new GameUIState();
         stateManager.attach(mainMenu);
+        
+        try
+        {
+            DemoApplication.httpConnection();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override
