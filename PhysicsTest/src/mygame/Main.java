@@ -17,6 +17,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import com.simsilica.lemur.GuiGlobals;
+import com.simsilica.lemur.style.BaseStyles;
+import states.GameUIState;
+import states.MainMenuAppState;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -31,6 +35,10 @@ public class Main extends SimpleApplication {
     Spatial camera;
     PlayerInputState playerInputState;
     Spatial cursorNode;
+    
+    MainMenuAppState mainMenu;
+    GameUIState gameUI;
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -51,6 +59,20 @@ public class Main extends SimpleApplication {
     }
     
 
+    public static void OnClickListener()
+    {
+        System.out.println("The world is yours2");
+    }
+    public void quitGame()
+    {
+        stateManager.detach(gameUI);
+        stateManager.attach(mainMenu);
+    }
+    public void startGame()
+    {
+        stateManager.detach(mainMenu);
+        stateManager.attach(gameUI);
+    }
     public AppSettings getSettings()
     {
         return settings;
@@ -78,7 +100,7 @@ public class Main extends SimpleApplication {
         spaceship.getControl(SpaceshipControl.class).setMass(1);
         ((Node)spaceship).getChild("Camera").getControl(CameraControl.class).setCamera(cam);
         rootNode.attachChild(geom);
-      //  MeshCollisionShape townShape = new MeshCollisionShape(townGeom.getMesh()
+
         Node node = new Node("floor");
         rootNode.attachChild(node);
         RigidBodyControl testFloor = new RigidBodyControl(0);
@@ -88,6 +110,16 @@ public class Main extends SimpleApplication {
         node.addControl(testFloor);
         bulletAppState.setDebugEnabled(true);
         playerInputState.setPlayer(spaceship.getControl(SpaceshipControl.class));
+        
+        GuiGlobals.initialize(this);
+        BaseStyles.loadGlassStyle();
+        GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
+        setDisplayStatView(false);
+        setDisplayFps(false);
+        
+        mainMenu = new MainMenuAppState();
+        gameUI = new GameUIState();
+        stateManager.attach(mainMenu);
     }
 
     @Override
