@@ -5,6 +5,7 @@
  */
 package controls;
 
+import ConstAndMethods.CollisionMasks;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import controls.SimplePhysicsControl;
 import com.jme3.export.InputCapsule;
@@ -37,6 +38,12 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     private static final float linearDamping = 0.5f;
     private static final float normalAcceleration = 10f;
 
+    @Override
+    public void physicsInitialize()
+    {
+        rigidBodyControl.setCollisionGroup(CollisionMasks.group_spaceship);
+        rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_spaceship);
+    }
     @Override
     public void initialize()
     {

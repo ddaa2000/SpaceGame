@@ -27,6 +27,7 @@ import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Box;
 import java.io.IOException;
+import mygame.Main;
 
 /**
  *
@@ -41,6 +42,12 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
     RigidBodyControl rigidBodyControl = null;
     protected boolean isPhysicsSet = false;
     
+    protected Main gameMain = null;
+    
+    public void setGameMain(Main gameMain)
+    {
+        this.gameMain = gameMain;
+    }
     /**
      * called before the first update, all the overrides should add super.initialize()
      */
@@ -106,8 +113,13 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
             rigidBodyControl = new RigidBodyControl(1);
    //     if(collisionShape != null)
      //       rigidBodyControl.setCollisionShape(new MeshCollisionShape(collisionShape.getMesh()));
+        setCollisionMask();
         spatial.addControl(rigidBodyControl);
         bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+    }
+    public void setCollisionMask()
+    {
+        
     }
     /**
      * all the physics simulation will start after calling this method

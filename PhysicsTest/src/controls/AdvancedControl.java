@@ -9,12 +9,15 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import java.io.IOException;
+import mygame.Main;
 
 /**
  *
@@ -26,6 +29,20 @@ public abstract class AdvancedControl extends AbstractControl {
     //Right-click a local variable to encapsulate it with getters and setters.
 
     boolean initialized = false;
+    
+    protected Main gameMain = null;
+    
+    public void setGameMain(Main gameMain)
+    {
+        this.gameMain = gameMain;
+    }
+    
+    public Spatial createGameObject(String name,Node parent)
+    {
+        
+        return gameMain.createGameObject(name, parent);
+    }
+    
     public void initialize()
     {
         initialized = true;

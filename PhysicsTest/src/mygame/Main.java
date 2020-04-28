@@ -20,6 +20,8 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
+import controls.AdvancedControl;
+import controls.BatteryControl;
 import controls.RockControl;
 import java.io.IOException;
 import states.GameUIState;
@@ -32,7 +34,7 @@ import states.MainMenuAppState;
  */
 public class Main extends SimpleApplication {
 
-    private BulletAppState bulletAppState;
+    public BulletAppState bulletAppState;
     Spatial spaceship;
     Spatial gameScene;
     Spatial camera;
@@ -58,6 +60,8 @@ public class Main extends SimpleApplication {
         Spatial newObject = assetManager.loadModel(name);
         parent.attachChild(newObject);
         newObject.setLocalTranslation(Vector3f.ZERO);
+        if(newObject.getControl(AdvancedControl.class)!=null)
+            newObject.getControl(AdvancedControl.class).setGameMain(this);
         return newObject;
     }
     
@@ -106,11 +110,12 @@ public class Main extends SimpleApplication {
             rock.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
             
             rock.getControl(RockControl.class).setPhysics(bulletAppState);
-            rock.getControl(RockControl.class).setPhysics(bulletAppState);
-            
-            
             
         }
+        
+        
+        
+        
         
         
        // Material rockmat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -122,6 +127,18 @@ public class Main extends SimpleApplication {
         ((Node)spaceship).getChild("Camera").getControl(CameraControl.class).setCamera(cam);
         rootNode.attachChild(geom);
 
+        for(int i = 0;i<30;i++)
+        {
+            Spatial cannon = createGameObject("Models/cannon.j3o",(Node)gameScene);
+            
+            cannon.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
+            cannon.getControl(BatteryControl.class).setPhysics(bulletAppState);
+            cannon.getControl(BatteryControl.class).setSpaceship(spaceship);
+            
+        }
+        
+        
+        
         Node node = new Node("floor");
         rootNode.attachChild(node);
         RigidBodyControl testFloor = new RigidBodyControl(0);
@@ -150,6 +167,7 @@ public class Main extends SimpleApplication {
         {
             ex.printStackTrace();
         }
+        
     }
 
     @Override

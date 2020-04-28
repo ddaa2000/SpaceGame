@@ -5,6 +5,7 @@
  */
 package controls;
 
+import ConstAndMethods.CollisionMasks;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
@@ -18,7 +19,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import mygame.Main;
 
 /**
  *
@@ -26,16 +29,34 @@ import com.jme3.scene.Spatial;
  */
 public class BatteryControl extends AdvancedControl implements PhysicsCollisionListener{
     public int life = 10;
-    public float distance = 10;
-    Spatial spaceship; 
+    public float distance = 1000;
+    Spatial spaceship = null; 
     BulletAppState bulletAppState = null;
     RigidBodyControl rigidbodyControl = null;
     private float boundary = 10;
+    
+    private static final float coolingDownTime = 10f;
+    private float counter = coolingDownTime;
+    
+    
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+    @Override
+    public void controlUpdate(float tpf)
+    {
+        super.controlUpdate(tpf);
+        if(counter>0)
+            counter-=tpf;
+        else if(spaceship!=null && spaceshipInRange())
+        {
+            counter = coolingDownTime;
+            shoot();
+        }
+            
+        
+    }
     public void damage(){
         life -= 1;
         if(life == 0){
@@ -60,19 +81,20 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
         rigidbodyControl.setCollisionShape(new SphereCollisionShape(boundary));
     }
     
-    public void getSpaceship(Spatial spaceship){
+    public void setSpaceship(Spatial spaceship){
         this.spaceship = spaceship;
     }
 
     
-     public void setPhysics(BulletAppState bulletAppState,Geometry collisionShape)
+     public void setPhysics(BulletAppState bulletAppState)
     {
         this.bulletAppState = bulletAppState;
         bulletAppState.getPhysicsSpace().addCollisionListener(this);
         if(rigidbodyControl == null)
             rigidbodyControl = new RigidBodyControl(0);
         spatial.addControl(rigidbodyControl);
-        
+        rigidbodyControl.setCollisionGroup(CollisionMasks.group_enemy);
+        rigidbodyControl.setCollideWithGroups(CollisionMasks.mask_enemy);
         bulletAppState.getPhysicsSpace().add(rigidbodyControl);
     }
 
@@ -81,13 +103,26 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
         
     }
     
-    public boolean shoot(){
-        Vector3f ship = spaceship.getLocalTranslation();
-        Vector3f battery = spatial.getLocalTranslation();
+    public void shoot()
+    {
+        Spatial bullet = createGameObject("Models/bullet.j3o",spatial.getParent());
+        BulletControl tempControl = bullet.getControl(BulletControl.class);
+        bullet.setLocalTranslation(spatial.getLocalTranslation());
+        bullet.setLocalScale(1);
+        bullet.lookAt(spaceship.getWorldTranslation(), new Vector3f(0,1,0));
+        tempControl.setPhysics(gameMain.bulletAppState);
+        tempControl.setLinearVelocityLocal(0, 0, 50);
+        
+        
+    }
+    public boolean spaceshipInRange(){
+        Vector3f ship = spaceship.getWorldTranslation();
+        Vector3f battery = spatial.getWorldTranslation();
         float dis = FastMath.sqrt(FastMath.pow((ship.x - battery.x),2)+
                 FastMath.pow((ship.y - battery.y),2)+
                 FastMath.pow((ship.z - battery.z),2));
         return dis <= distance;
     }
+
 
  }

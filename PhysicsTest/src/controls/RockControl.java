@@ -5,6 +5,7 @@
  */
 package controls;
 
+import ConstAndMethods.CollisionMasks;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -33,6 +34,8 @@ public class RockControl extends SimplePhysicsControl {
         applyTorqueImpulse((float)(Math.random()*5)-2.5f,(float)(Math.random()*5)-2.5f,(float)(Math.random()*5)-2.5f);
         applyImpulse((float)(Math.random()*5)-2.5f,(float)(Math.random()*5)-2.5f,(float)(Math.random()*5)-2.5f);
         setSphereCollider(2*spatial.getLocalScale().x);
+        rigidBodyControl.setCollisionGroup(CollisionMasks.group_rock);
+        rigidBodyControl.setCollisionGroup(CollisionMasks.mask_rock);
     }
     
     

@@ -5,6 +5,7 @@
  */
 package controls;
 
+import ConstAndMethods.CollisionMasks;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -20,15 +21,50 @@ import com.jme3.scene.Spatial;
  */
 public class BulletControl extends SimplePhysicsControl{
     //public float velocity = 20;
+    boolean isEnemyBullet = true;
+    public static final float radius = 3f;
+    private static final float maxLifeTime = 8f;
+    private float presentLifeTime = maxLifeTime;
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
+    @Override
+    protected void controlUpdate(float tpf)
+    {
+        presentLifeTime -= tpf;
+        if(presentLifeTime<0)
+            removeSelfObject();
+            
+    }
+    public void setAsSpaceshipBullet()
+    {
+        isEnemyBullet = false;
+        rigidBodyControl.setCollisionGroup(CollisionMasks.group_spaceshipBullet);
+        rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_spaceshipBullet);
+        
     }
     
     @Override
+    public void physicsInitialize()
+    {
+        setSphereCollider(3);
+        if(isEnemyBullet)
+        {
+            rigidBodyControl.setCollisionGroup(CollisionMasks.group_enemyBullet);
+            rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_enemyBullet);
+        }
+        else
+        {
+            rigidBodyControl.setCollisionGroup(CollisionMasks.group_spaceshipBullet);
+            rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_spaceshipBullet);
+        }
+    }
+    @Override
     public void OnCollisionDetected(Spatial other, PhysicsCollisionEvent event)
     {
-        if(other.getName().equals("SpaceShip")){
+        System.out.println("bullet collide with "+other.getName());
+   /*     if(other.getName().equals("Spaceship")){
             other.getControl(SimplePhysicsControl.class).removeSelfObject(); 
         }
         else if(other.getName().equals("Battery")){
@@ -36,6 +72,6 @@ public class BulletControl extends SimplePhysicsControl{
         }
         else 
             other.getControl(SimplePhysicsControl.class).removeSelfObject();
-        this.removeSelfObject(); //只要子弹击中就会扣除血量
+        this.removeSelfObject(); //只要子弹击中就会扣除血量*/
     }
 }
