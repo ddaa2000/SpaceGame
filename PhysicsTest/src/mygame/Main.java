@@ -20,6 +20,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
+import controls.RockControl;
 import java.io.IOException;
 import states.GameUIState;
 import states.MainMenuAppState;
@@ -96,6 +97,24 @@ public class Main extends SimpleApplication {
         spaceship =  createGameObject("Models/Spaceship.j3o",(Node)gameScene);
         cursorNode = createGameObject("Models/cursorCube.j3o",guiNode);
         
+        for(int i = 0;i<100;i++)
+        {
+            Spatial rock = createGameObject("Models/rock/rock.j3o",(Node)gameScene);
+            float randomScale = (float)Math.random()*2+1;
+            
+            rock.setLocalScale(new Vector3f(randomScale,randomScale,randomScale));
+            rock.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
+            
+            rock.getControl(RockControl.class).setPhysics(bulletAppState);
+            rock.getControl(RockControl.class).setPhysics(bulletAppState);
+            
+            
+            
+        }
+        
+        
+       // Material rockmat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //((Geometry)rock).setMaterial(rockmat);
 
         spaceship.setLocalTranslation(new Vector3f(0,50,0));
         spaceship.getControl(SpaceshipControl.class).setPhysics(bulletAppState);

@@ -35,6 +35,7 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     private static final float speedFactor = 0.6f;
     private static final float angularDamping = 0.4f;
     private static final float linearDamping = 0.5f;
+    private static final float normalAcceleration = 10f;
 
     @Override
     public void initialize()
@@ -49,8 +50,8 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         //TODO: add code that controls Spatial,
         //e.g. spatial.rotate(tpf,tpf,tpf);
         super.controlUpdate(tpf);
-       
-        setLinearVelocityLocal(0,0,10);
+        float acceleration = normalAcceleration*tpf;
+        applyImpulseLocal(0,0,acceleration);
     }
     
     @Override

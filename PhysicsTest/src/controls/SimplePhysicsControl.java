@@ -40,6 +40,7 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
     BulletAppState bulletAppState = null;
     RigidBodyControl rigidBodyControl = null;
     protected boolean isPhysicsSet = false;
+    
     /**
      * called before the first update, all the overrides should add super.initialize()
      */
@@ -71,6 +72,10 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
         if(rigidBodyControl==null)
             rigidBodyControl = new RigidBodyControl(1);
     }
+    public void physicsInitialize()
+    {
+        
+    }
     public void setMass(float mass)
     {
         if(rigidBodyControl!=null)
@@ -90,12 +95,7 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
 
     }
     
-    /**
-     * all the physics simulation will start after calling this method
-     * @param bulletAppState the bulletAppState that we needed for physics simulation
-     * @param collisionShape currently no use,just give null
-     */
-    public void setPhysics(BulletAppState bulletAppState)
+    private void basicsPhysicsInitialize(BulletAppState bulletAppState)
     {
         bulletAppState.getPhysicsSpace().addCollisionListener(this);
         System.out.println("set physics successfully");
@@ -108,8 +108,24 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
      //       rigidBodyControl.setCollisionShape(new MeshCollisionShape(collisionShape.getMesh()));
         spatial.addControl(rigidBodyControl);
         bulletAppState.getPhysicsSpace().add(rigidBodyControl);
-        
     }
+    /**
+     * all the physics simulation will start after calling this method
+     * @param bulletAppState the bulletAppState that we needed for physics simulation
+     * @param collisionShape currently no use,just give null
+     */
+    public void setPhysics(BulletAppState bulletAppState)
+    {
+        basicsPhysicsInitialize(bulletAppState);
+        physicsInitialize();
+    }
+     public void setPhysics(BulletAppState bulletAppState,float mass)
+    {
+        basicsPhysicsInitialize(bulletAppState);
+        setMass(mass);
+        physicsInitialize();
+    }
+    
     
     /**
      * give impulse on the center of the object, the parameter is  in orld axis
