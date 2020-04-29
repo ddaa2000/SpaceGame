@@ -34,12 +34,18 @@ public abstract class AdvancedControl extends AbstractControl {
     
     public void setGameMain(Main gameMain)
     {
+        System.out.println("set main"+spatial.getName());
         this.gameMain = gameMain;
     }
     
     public Spatial createGameObject(String name,Node parent)
     {
-        
+        if(gameMain==null)
+        {
+            return null;
+            
+        }
+            
         return gameMain.createGameObject(name, parent);
     }
     

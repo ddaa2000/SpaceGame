@@ -42,12 +42,6 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
     RigidBodyControl rigidBodyControl = null;
     protected boolean isPhysicsSet = false;
     
-    protected Main gameMain = null;
-    
-    public void setGameMain(Main gameMain)
-    {
-        this.gameMain = gameMain;
-    }
     /**
      * called before the first update, all the overrides should add super.initialize()
      */
@@ -69,7 +63,7 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
     
     public void OnCollisionDetected(Spatial other, PhysicsCollisionEvent event)
     {
-        System.out.println("collid with "+other.getName());
+     //   System.out.println("collid with "+other.getName());
     }
     
     @Override

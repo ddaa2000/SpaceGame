@@ -23,6 +23,7 @@ import com.simsilica.lemur.style.BaseStyles;
 import controls.AdvancedControl;
 import controls.BatteryControl;
 import controls.RockControl;
+import controls.SimplePhysicsControl;
 import java.io.IOException;
 import states.GameUIState;
 import states.MainMenuAppState;
