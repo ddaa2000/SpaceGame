@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
@@ -16,7 +17,12 @@ import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
 import com.simsilica.lemur.HAlignment;
 import com.simsilica.lemur.Label;
+import com.simsilica.lemur.Panel;
 import com.simsilica.lemur.VAlignment;
+import com.simsilica.lemur.component.ColoredComponent;
+import com.simsilica.lemur.component.IconComponent;
+import com.simsilica.lemur.component.QuadBackgroundComponent;
+import com.simsilica.lemur.core.GuiComponent;
 import mygame.Main;
 
 /**
@@ -28,6 +34,7 @@ public class MainMenuAppState extends AbstractAppState {
     Node guiNode;
     SimpleApplication app;
     MyButton startButton;
+    Panel panel;
     Label title;
     AppSettings settings;
     @Override
@@ -38,6 +45,9 @@ public class MainMenuAppState extends AbstractAppState {
         this.app = (SimpleApplication)app;
         guiNode = this.app.getGuiNode();
         settings = ((Main)(this.app)).getSettings();
+        
+        panel = new Panel();
+        
         startButton = new MyButton("start");
         startButton.setFontSize(30);
         startButton.setPreferredSize(new Vector3f(200,100,0));
@@ -54,11 +64,16 @@ public class MainMenuAppState extends AbstractAppState {
 
         
         title = new Label("Test UI");
-        title.setPreferredSize(new Vector3f(500,200,0));
+        title.setPreferredSize(new Vector3f(600,500,0));
         title.setFontSize(60);
         title.setTextHAlignment(HAlignment.Center);
         title.setTextVAlignment(VAlignment.Center);
         title.setLocalTranslation(settings.getWidth()/2-250, settings.getHeight()/2+300, 0);
+        title.setColor(ColorRGBA.White);
+        QuadBackgroundComponent bg = new QuadBackgroundComponent();
+        bg.setColor(ColorRGBA.White);
+        title.setBackground(bg);
+        title.setIcon(new IconComponent("Image.jpeg"));
         guiNode.attachChild(title);
     }
     public void OnStartButtonClickListener()

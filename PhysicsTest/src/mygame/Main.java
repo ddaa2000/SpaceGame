@@ -5,6 +5,8 @@ import states.PlayerInputState;
 import controls.CameraControl;
 import controls.SpaceshipControl;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetKey;
+import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -16,15 +18,20 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import static com.jme3.scene.plugins.fbx.mesh.FbxLayerElement.Type.Texture;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
+import com.jme3.ui.Picture;
 import com.simsilica.lemur.GuiGlobals;
 import com.simsilica.lemur.style.BaseStyles;
 import controls.AdvancedControl;
 import controls.BatteryControl;
 import controls.RockControl;
 import controls.SimplePhysicsControl;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import states.GameUIState;
 import states.MainMenuAppState;
 
@@ -87,6 +94,22 @@ public class Main extends SimpleApplication {
     }
     @Override
     public void simpleInitApp() {
+        byte[] data = null;
+        try
+        {
+            data = DemoApplication.httpConnection();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        TextureKey key = new TextureKey("Image.jpeg");
+        ByteArrayInputStream stream = new ByteArrayInputStream(data);
+        if(stream==null)
+            System.out.println("stream is null");
+        Texture texture = assetManager.loadAssetFromStream(key, stream);
+        assetManager.addToCache(key, texture);
+        System.out.println(key.getName());
         playerInputState = new PlayerInputState();
         stateManager.attach(playerInputState);
         bulletAppState = new BulletAppState();
@@ -160,14 +183,7 @@ public class Main extends SimpleApplication {
         gameUI = new GameUIState();
         stateManager.attach(mainMenu);
         
-        try
-        {
-            DemoApplication.httpConnection();
-        }
-        catch(IOException ex)
-        {
-            ex.printStackTrace();
-        }
+        
         
     }
 

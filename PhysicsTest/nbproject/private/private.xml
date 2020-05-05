@@ -16,7 +16,6 @@
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/ConstAndMethods/CollisionMasks.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/AdvancedControl.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/mygame/Main.java</file>
-            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/assets/Models/Spaceship.j3o</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/Result.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/WxaCode.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/SpaceshipControl.java</file>
@@ -25,6 +24,8 @@
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/Game1.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/MyButton.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/RockControl.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Exceptions/ColliderSpatialNotFoundException.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Exceptions/WrongEncodeException.java</file>
         </group>
     </open-files>
 </project-private>
