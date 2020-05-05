@@ -32,6 +32,7 @@ import controls.SimplePhysicsControl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import states.Game1;
 import states.GameUIState;
 import states.MainMenuAppState;
 
@@ -48,6 +49,8 @@ public class Main extends SimpleApplication {
     Spatial camera;
     PlayerInputState playerInputState;
     Spatial cursorNode;
+    
+    Game1 game;
     
     MainMenuAppState mainMenu;
     GameUIState gameUI;
@@ -82,18 +85,24 @@ public class Main extends SimpleApplication {
     {
         stateManager.detach(gameUI);
         stateManager.attach(mainMenu);
+        game.quitGame();
+        stateManager.detach(game);
+        
     }
     public void startGame()
     {
         stateManager.detach(mainMenu);
         stateManager.attach(gameUI);
+        stateManager.attach(game);
+        game.startGame();
     }
     public AppSettings getSettings()
     {
         return settings;
     }
-    @Override
-    public void simpleInitApp() {
+    
+    public void httpConnect()
+    {
         byte[] data = null;
         try
         {
@@ -109,7 +118,9 @@ public class Main extends SimpleApplication {
             System.out.println("stream is null");
         Texture texture = assetManager.loadAssetFromStream(key, stream);
         assetManager.addToCache(key, texture);
-        System.out.println(key.getName());
+    }
+    public void init_old()
+    {
         playerInputState = new PlayerInputState();
         stateManager.attach(playerInputState);
         bulletAppState = new BulletAppState();
@@ -172,7 +183,12 @@ public class Main extends SimpleApplication {
         node.addControl(testFloor);
         bulletAppState.setDebugEnabled(true);
         playerInputState.setPlayer(spaceship.getControl(SpaceshipControl.class));
+    }
+    @Override
+    public void simpleInitApp() {
         
+        httpConnect();
+        init_old();
         GuiGlobals.initialize(this);
         BaseStyles.loadGlassStyle();
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
@@ -182,6 +198,7 @@ public class Main extends SimpleApplication {
         mainMenu = new MainMenuAppState();
         gameUI = new GameUIState();
         stateManager.attach(mainMenu);
+       // game = new Game1();
         
         
         
