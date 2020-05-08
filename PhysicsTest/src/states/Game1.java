@@ -36,8 +36,6 @@ public class Game1 extends AdvancedState {
     Spatial cursorNode;
     Node Floor;
     RigidBodyControl testFloor;
-    MainMenuAppState mainMenu;
-    GameUIState gameUI;
     
     /**
      * use this to simplify creating gameObject from assets
@@ -56,18 +54,14 @@ public class Game1 extends AdvancedState {
     
     public void quitGame()
     {
-        stateManager.detach(gameUI);
         stateManager.detach(playerInputState);
         stateManager.detach(bulletAppState);
         spaceship.getParent().detachAllChildren();
         rootNode.detachAllChildren();
         
-        stateManager.attach(mainMenu);
     }
     public void startGame()
     {
-        stateManager.detach(mainMenu);
-        stateManager.attach(gameUI);
         
         //initialize states
         playerInputState = new PlayerInputState();
@@ -103,9 +97,6 @@ public class Game1 extends AdvancedState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
-        mainMenu = new MainMenuAppState();
-        gameUI = new GameUIState();
-        stateManager.attach(mainMenu);
         //TODO: initialize your AppState, e.g. attach spatials to rootNode
        
         //this is called on the OpenGL thread after the AppState has been attached

@@ -27,6 +27,8 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
     private final WebSocketClientHandshaker handshaker;
     private ChannelPromise handshakeFuture;
+    public static boolean connected = false;
+    public static int userId = -1;
 
     public WebSocketClientHandler(WebSocketClientHandshaker handshaker) {
         this.handshaker = handshaker;
@@ -105,6 +107,16 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 System.out.println("country = " + country);
                 System.out.println("avatarUrl = " + avatarUrl);
                 System.out.println("timestamp = " + timestamp);
+                WebSocketClientHandler.userId = userId;
+                WebSocketClientHandler.connected = true;
+                if(WebSocketClient.group!=null)
+                    WebSocketClient.group.shutdownGracefully();
+                synchronized(DemoApplication.mutex){
+                    DemoApplication.userInfo = new UserInfo();
+                    DemoApplication.userInfo.userId = userId;
+                }
+                
+                
             }
         } else if (frame instanceof PongWebSocketFrame) {
             System.out.println("WebSocket Client received pong");

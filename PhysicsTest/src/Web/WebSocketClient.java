@@ -27,6 +27,7 @@ import java.net.URI;
  */
 public final class WebSocketClient {
 
+    public static EventLoopGroup group = null;
     /**
      * 指定WebSocket远程服务器地址
      */
@@ -73,7 +74,7 @@ public final class WebSocketClient {
                 sslCtx = null;
             }
 
-            EventLoopGroup group = new NioEventLoopGroup();
+            group = new NioEventLoopGroup();
             final WebSocketClientHandler handler =
                     new WebSocketClientHandler(
                             WebSocketClientHandshakerFactory.newHandshaker(

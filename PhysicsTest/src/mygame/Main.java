@@ -1,6 +1,10 @@
 package mygame;
 
 import Web.DemoApplication;
+import Web.Result;
+import cn.ac.mryao.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import states.PlayerInputState;
 import controls.CameraControl;
 import controls.SpaceshipControl;
@@ -32,6 +36,8 @@ import controls.SimplePhysicsControl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import states.Game1;
 import states.GameUIState;
 import states.MainMenuAppState;
@@ -93,7 +99,6 @@ public class Main extends SimpleApplication {
     {
         stateManager.detach(mainMenu);
         stateManager.attach(gameUI);
-        stateManager.attach(game);
         game.startGame();
     }
     public AppSettings getSettings()
@@ -101,24 +106,6 @@ public class Main extends SimpleApplication {
         return settings;
     }
     
-    public void httpConnect()
-    {
-        byte[] data = null;
-        try
-        {
-            data = DemoApplication.httpConnection();
-        }
-        catch(IOException ex)
-        {
-            ex.printStackTrace();
-        }
-        TextureKey key = new TextureKey("Image.jpeg");
-        ByteArrayInputStream stream = new ByteArrayInputStream(data);
-        if(stream==null)
-            System.out.println("stream is null");
-        Texture texture = assetManager.loadAssetFromStream(key, stream);
-        assetManager.addToCache(key, texture);
-    }
     public void init_old()
     {
         playerInputState = new PlayerInputState();
@@ -187,8 +174,27 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
-        httpConnect();
-        init_old();
+        DemoApplication.getAccessToken();
+        
+        byte[] data = null;
+        try
+        {
+            data = DemoApplication.registerUser();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        TextureKey key = new TextureKey("Image.jpeg");
+        ByteArrayInputStream stream = new ByteArrayInputStream(data);
+        if(stream==null)
+            System.out.println("stream is null");
+        Texture texture = assetManager.loadAssetFromStream(key, stream);
+        assetManager.addToCache(key, texture);
+        
+        
+        
+       // init_old();
         GuiGlobals.initialize(this);
         BaseStyles.loadGlassStyle();
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
@@ -198,17 +204,22 @@ public class Main extends SimpleApplication {
         mainMenu = new MainMenuAppState();
         gameUI = new GameUIState();
         stateManager.attach(mainMenu);
-       // game = new Game1();
         
+        game = new Game1();
+        stateManager.attach(game);
+
         
-        
+    }
+    public void Pause()
+    {
+        paused = true;
     }
 
     @Override
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-        Vector2f mousePos = inputManager.getCursorPosition();
-        cursorNode.setLocalTranslation(mousePos.x,mousePos.y,0);
+
+
     }
 
     @Override

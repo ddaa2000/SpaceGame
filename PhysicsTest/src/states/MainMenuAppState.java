@@ -5,6 +5,8 @@
  */
 package states;
 
+import Web.DemoApplication;
+import Web.WebSocketClientHandler;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -51,7 +53,6 @@ public class MainMenuAppState extends AbstractAppState {
         startButton = new MyButton("start");
         startButton.setFontSize(30);
         startButton.setPreferredSize(new Vector3f(200,100,0));
-        guiNode.attachChild(startButton);
         startButton.setSize(Vector3f.ZERO);
         startButton.addClickCommands(new Command<Button>() {
             @Override
@@ -60,10 +61,9 @@ public class MainMenuAppState extends AbstractAppState {
             }
         });
         startButton.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
-            
-
         
-        title = new Label("Test UI");
+        
+        title = new Label("");
         title.setPreferredSize(new Vector3f(600,500,0));
         title.setFontSize(60);
         title.setTextHAlignment(HAlignment.Center);
@@ -85,6 +85,12 @@ public class MainMenuAppState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         //TODO: implement behavior during runtime
+        if(DemoApplication.hasLoggedIn()){
+            title.setIcon(null);
+            title.setBackground(null);
+            title.setText("Log in successfully");
+            guiNode.attachChild(startButton);
+        }
     }
     
     @Override

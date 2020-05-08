@@ -5,6 +5,14 @@
  */
 package states;
 
+import Data.SavedGame;
+import Exceptions.wrongUserInfoException;
+import Web.DemoApplication;
+import Web.Result;
+import Web.WebSocketClientHandler;
+import cn.ac.mryao.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -14,6 +22,12 @@ import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.simsilica.lemur.Button;
 import com.simsilica.lemur.Command;
+import com.simsilica.lemur.HAlignment;
+import com.simsilica.lemur.Label;
+import com.simsilica.lemur.VAlignment;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mygame.Main;
 
 
@@ -25,8 +39,10 @@ public class GameUIState extends AbstractAppState {
     
     Node guiNode;
     SimpleApplication app;
-    MyButton quitButton;
+    MyButton quitButton,saveButton;
     AppSettings settings;
+    Label title;
+    SavedGame savedGame =new SavedGame();
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -47,10 +63,46 @@ public class GameUIState extends AbstractAppState {
             }
         });
         quitButton.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
+        
+        savedGame = loadGame();
+        
+        title = new Label("this is the "+savedGame.playedTimes+" time you play this game");
+        title.setPreferredSize(new Vector3f(600,500,0));
+        title.setFontSize(60);
+        title.setTextHAlignment(HAlignment.Center);
+        title.setTextVAlignment(VAlignment.Center);
+        title.setLocalTranslation(settings.getWidth()/2-250, settings.getHeight()/2+300, 0);
+        guiNode.attachChild(title);
+    }
+    public void saveGame(SavedGame savedGame){
+        try {
+            savedGame.playedTimes++;
+            savedGame.playerTimes2+=2;
+            String presentData = JSON.toJSONString(savedGame);
+            DemoApplication.uploadData(presentData);
+        } catch (wrongUserInfoException ex) {
+            Logger.getLogger(GameUIState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public SavedGame loadGame(){
+        SavedGame savedGame = new SavedGame();
+        try {
+            String previousData = DemoApplication.downloadData();
+            if(previousData!=null)
+                savedGame = JSON.parseObject(previousData, savedGame.getClass());
+            if(savedGame==null){
+                savedGame = new SavedGame();
+            }
+        } catch (wrongUserInfoException ex) {
+            Logger.getLogger(GameUIState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return savedGame;
     }
     public void OnStartButtonClickListener()
     {
         System.out.println("hahaha");
+        saveGame(savedGame);
+        
         ((Main)app).quitGame();
     }
     
@@ -66,6 +118,7 @@ public class GameUIState extends AbstractAppState {
         //e.g. remove all spatials from rootNode
         //this is called on the OpenGL thread after the AppState has been detached
         guiNode.detachChild(quitButton);
+        guiNode.detachChild(title);
         
     }
     
