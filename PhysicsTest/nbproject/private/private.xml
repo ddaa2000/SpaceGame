@@ -5,10 +5,12 @@
         <group>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/MainMenuAppState.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Data/SavedGame.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/interfaces/IDamagable.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/WxaPublicUserInfo.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/DemoApplication.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/BulletControl.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/ConstAndMethods/CollisionMasks.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/assets/Models/Spaceship.j3o</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/Result.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/SpaceshipControl.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/CameraControl.java</file>
@@ -16,12 +18,14 @@
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/MyButton.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Exceptions/wrongUserInfoException.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Exceptions/ColliderSpatialNotFoundException.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/interfaces/IPlayerControl.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Exceptions/WrongEncodeException.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/ConstAndMethods/Tags.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/WebSocketClient.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/GameUIState.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/AdvancedState.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/WebSocketClientHandler.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/ConstAndMethods/Types.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/BatteryControl.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/AdvancedControl.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/mygame/Main.java</file>
@@ -30,6 +34,7 @@
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/HttpUtil.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/Web/UserInfo.java</file>
             <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/controls/RockControl.java</file>
+            <file>file:/D:/programing/JME%20space/SpaceGame/PhysicsTest/src/states/PlayerInputState.java</file>
         </group>
     </open-files>
 </project-private>

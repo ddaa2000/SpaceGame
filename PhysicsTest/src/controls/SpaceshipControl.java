@@ -15,6 +15,7 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
@@ -30,14 +31,17 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     //appear in the SDK properties window and can be edited.
     //Right-click a local variable to encapsulate it with getters and setters.
 
-
-    private static final float rotationFactor = 0.003f;
-    private static final float planeRotationFactor = 0.006f;
-    private static final float speedFactor = 0.6f;
+    public int life = 1000;
+    private static final float rotationFactor = 0.01f;
+    private static final float planeRotationFactor = 0.02f;
+    private static final float speedFactor = 0.3f;
     private static final float angularDamping = 0.4f;
     private static final float linearDamping = 0.5f;
     private static final float normalAcceleration = 10f;
-
+    private static final float coolingDownTime = 0.5f;
+    private float counter = coolingDownTime;
+    private boolean CanShoot = true;
+    
     @Override
     public void physicsInitialize()
     {
@@ -57,6 +61,8 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         //TODO: add code that controls Spatial,
         //e.g. spatial.rotate(tpf,tpf,tpf);
         super.controlUpdate(tpf);
+        if(counter>0)
+           counter-=tpf;
         float acceleration = normalAcceleration*tpf;
         applyImpulseLocal(0,0,acceleration);
     }
@@ -115,6 +121,25 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         applyTorqueImpulseLocal(0,0,(float)value*planeRotationFactor);
     }
 
-    
-    
+    @Override
+    public void attack(){
+        if(counter <= 0){
+            Spatial bullet = createGameObject("Models/bullet.j3o",spatial.getParent()); 
+            BulletControl tempControl = bullet.getControl(BulletControl.class);         
+            bullet.setLocalTranslation(spatial.getLocalTranslation());
+            bullet.setLocalScale(1); 
+            bullet.setLocalRotation(spatial.getLocalRotation());
+            tempControl.setPhysics(gameMain.bulletAppState);
+            tempControl.setAsSpaceshipBullet();
+            tempControl.setLinearVelocityLocal(0,0,50);         
+            counter = coolingDownTime;
+        }
+
+    }
+    public void damage(){
+        life -= 1;
+        if(life == 0){
+            this.removeSelfObject();
+        }
+    }
 }

@@ -20,7 +20,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import controls.BatteryControl;
 import controls.CameraControl;
+import controls.RockControl;
 import controls.SpaceshipControl;
 
 /**
@@ -46,16 +48,12 @@ public class Game1 extends AdvancedState {
     
     public Spatial createGameObject(String name,Node parent)
     {
-        Spatial newObject = assetManager.loadModel(name);
-        parent.attachChild(newObject);
-        newObject.setLocalTranslation(Vector3f.ZERO);
-        return newObject;
+        return gameApplication.createGameObject(name, parent);
     }
     
     public void quitGame()
     {
         stateManager.detach(playerInputState);
-        stateManager.detach(bulletAppState);
         spaceship.getParent().detachAllChildren();
         rootNode.detachAllChildren();
         
@@ -66,8 +64,7 @@ public class Game1 extends AdvancedState {
         //initialize states
         playerInputState = new PlayerInputState();
         stateManager.attach(playerInputState);
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
+        bulletAppState = gameApplication.bulletAppState;
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0,0,0));
         
         //when delete or initialize, operate "gameScene"
@@ -88,6 +85,28 @@ public class Game1 extends AdvancedState {
         Floor.addControl(testFloor);
         bulletAppState.setDebugEnabled(true);
         playerInputState.setPlayer(spaceship.getControl(SpaceshipControl.class));
+        
+        
+        for(int i = 0;i<100;i++)
+        {
+            Spatial rock = createGameObject("Models/rock/rock.j3o",(Node)gameScene);
+            float randomScale = (float)Math.random()*2+1;
+            
+            rock.setLocalScale(new Vector3f(randomScale,randomScale,randomScale));
+            rock.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
+            
+            rock.getControl(RockControl.class).setPhysics(bulletAppState);
+            
+        }
+        for(int i = 0;i<30;i++)
+        {
+            Spatial cannon = createGameObject("Models/cannon.j3o",(Node)gameScene);
+            
+            cannon.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
+            cannon.getControl(BatteryControl.class).setPhysics(bulletAppState);
+            cannon.getControl(BatteryControl.class).setSpaceship(spaceship);
+            
+        }
     }    
     public AppSettings getSettings()
     {

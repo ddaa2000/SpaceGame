@@ -6,6 +6,7 @@
 package controls;
 
 import ConstAndMethods.CollisionMasks;
+import ConstAndMethods.Types;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -21,7 +22,7 @@ import com.jme3.scene.Spatial;
  */
 public class BulletControl extends SimplePhysicsControl{
     //public float velocity = 20;
-    boolean isEnemyBullet = true;
+    public boolean isEnemyBullet = true;
     public static final float radius = 3f;
     private static final float maxLifeTime = 8f;
     private float presentLifeTime = maxLifeTime;
@@ -48,6 +49,7 @@ public class BulletControl extends SimplePhysicsControl{
     @Override
     public void physicsInitialize()
     {
+        setMass(0.001f);
         setSphereCollider(3);
         if(isEnemyBullet)
         {
@@ -64,14 +66,13 @@ public class BulletControl extends SimplePhysicsControl{
     public void OnCollisionDetected(Spatial other, PhysicsCollisionEvent event)
     {
         System.out.println("bullet collide with "+other.getName());
-   /*     if(other.getName().equals("Spaceship")){
-            other.getControl(SimplePhysicsControl.class).removeSelfObject(); 
+        if(Types.isSpaceship(other)){
+            other.getControl(SpaceshipControl.class).damage();
         }
-        else if(other.getName().equals("Battery")){
+        else if(Types.isBattery(other)){
             other.getControl(BatteryControl.class).damage(); 
         }
-        else 
-            other.getControl(SimplePhysicsControl.class).removeSelfObject();
-        this.removeSelfObject(); //只要子弹击中就会扣除血量*/
+       // spatial.removeFromParent();
+        this.removeSelfObject(); 
     }
 }

@@ -99,7 +99,7 @@ public abstract class SimplePhysicsControl extends AdvancedControl implements Ph
     private void basicsPhysicsInitialize(BulletAppState bulletAppState)
     {
         bulletAppState.getPhysicsSpace().addCollisionListener(this);
-        System.out.println("set physics successfully");
+       // System.out.println("set physics successfully");
         isPhysicsSet = true;
         this.bulletAppState = bulletAppState;
        

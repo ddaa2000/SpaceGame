@@ -53,6 +53,7 @@ public class PlayerInputState extends AbstractAppState {
         final Trigger Trigger_S = new KeyTrigger(KeyInput.KEY_S);
         final Trigger Trigger_A = new KeyTrigger(KeyInput.KEY_A); 
         final Trigger Trigger_D = new KeyTrigger(KeyInput.KEY_D);
+        final Trigger Trigger_Space = new KeyTrigger(KeyInput.KEY_SPACE);
         final Trigger Trigger_MouseMove_Left = new MouseAxisTrigger(MouseInput.AXIS_X, false);
         final Trigger Trigger_MouseMove_Right = new MouseAxisTrigger(MouseInput.AXIS_X, true);
         final Trigger Trigger_MouseMove_Up = new MouseAxisTrigger(MouseInput.AXIS_Y, true);
@@ -64,8 +65,8 @@ public class PlayerInputState extends AbstractAppState {
         inputManager.addMapping("Speed_Down", Trigger_S);
         inputManager.addMapping("Left_Turn", Trigger_A);
         inputManager.addMapping("Right_Turn", Trigger_D);
-        
-        inputManager.addListener(analogListener, "Speed_Up", "Speed_Down", "Left_Turn", "Right_Turn");
+        inputManager.addMapping("Shoot", Trigger_Space);
+        inputManager.addListener(analogListener, "Speed_Up", "Speed_Down", "Left_Turn", "Right_Turn", "Shoot");
     }
     
     @Override
@@ -113,6 +114,9 @@ public class PlayerInputState extends AbstractAppState {
                 }
                 else if(name.equals("Left_Rotate")){
                     playerCT.setHorizontalRotationValue(1);
+                }
+                else if(name.equals("Shoot")){
+                    playerCT.attack();
                 }
             }
             

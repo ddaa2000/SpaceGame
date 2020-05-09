@@ -110,9 +110,7 @@ public class Main extends SimpleApplication {
     {
         playerInputState = new PlayerInputState();
         stateManager.attach(playerInputState);
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
-        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0,0,0));
+        
         Box b = new Box(1, 1, 1);
         Geometry geom = new Geometry("Box", b);
 
@@ -123,17 +121,7 @@ public class Main extends SimpleApplication {
         spaceship =  createGameObject("Models/Spaceship.j3o",(Node)gameScene);
         cursorNode = createGameObject("Models/cursorCube.j3o",guiNode);
         
-        for(int i = 0;i<100;i++)
-        {
-            Spatial rock = createGameObject("Models/rock/rock.j3o",(Node)gameScene);
-            float randomScale = (float)Math.random()*2+1;
-            
-            rock.setLocalScale(new Vector3f(randomScale,randomScale,randomScale));
-            rock.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
-            
-            rock.getControl(RockControl.class).setPhysics(bulletAppState);
-            
-        }
+        
         
         
         
@@ -149,15 +137,7 @@ public class Main extends SimpleApplication {
         ((Node)spaceship).getChild("Camera").getControl(CameraControl.class).setCamera(cam);
         rootNode.attachChild(geom);
 
-        for(int i = 0;i<30;i++)
-        {
-            Spatial cannon = createGameObject("Models/cannon.j3o",(Node)gameScene);
-            
-            cannon.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
-            cannon.getControl(BatteryControl.class).setPhysics(bulletAppState);
-            cannon.getControl(BatteryControl.class).setSpaceship(spaceship);
-            
-        }
+        
         
         
         
@@ -200,6 +180,10 @@ public class Main extends SimpleApplication {
         GuiGlobals.getInstance().getStyles().setDefaultStyle("glass");
         setDisplayStatView(false);
         setDisplayFps(false);
+        
+        bulletAppState = new BulletAppState();
+        stateManager.attach(bulletAppState);
+        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0,0,0));
         
         mainMenu = new MainMenuAppState();
         gameUI = new GameUIState();

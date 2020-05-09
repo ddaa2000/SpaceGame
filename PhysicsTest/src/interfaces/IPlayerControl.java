@@ -15,4 +15,5 @@ public interface IPlayerControl {
     public void speedUp(double strength);
     public void speedDown(double strength);
     public void setPlaneRotationValue(double value);
+    public void attack();
 }
