@@ -59,7 +59,7 @@ public class GameUIState extends AbstractAppState {
         quitButton.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                OnStartButtonClickListener();
+                OnQuitButtonClickListener();
             }
         });
         quitButton.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
@@ -98,9 +98,8 @@ public class GameUIState extends AbstractAppState {
         }
         return savedGame;
     }
-    public void OnStartButtonClickListener()
+    public void OnQuitButtonClickListener()
     {
-        System.out.println("hahaha");
         saveGame(savedGame);
         
         ((Main)app).quitGame();

@@ -54,8 +54,11 @@ public class Game1 extends AdvancedState {
     public void quitGame()
     {
         stateManager.detach(playerInputState);
-        spaceship.getParent().detachAllChildren();
-        rootNode.detachAllChildren();
+        bulletAppState.getPhysicsSpace().removeAll(gameScene);
+        gameScene.removeFromParent();
+        gameScene = null;
+        spaceship = null;
+        
         
     }
     public void startGame()
@@ -76,13 +79,7 @@ public class Game1 extends AdvancedState {
         spaceship.getControl(SpaceshipControl.class).setMass(1);
         ((Node)spaceship).getChild("Camera").getControl(CameraControl.class).setCamera(cam);
         
-        Floor= new Node("floor");
-        rootNode.attachChild(Floor);
-        testFloor = new RigidBodyControl(0);
-        testFloor.setCollisionShape(new BoxCollisionShape(new Vector3f(200,1,200)));
-        bulletAppState.getPhysicsSpace().add(testFloor);
-        testFloor.setPhysicsLocation(new Vector3f(0,0,0));
-        Floor.addControl(testFloor);
+
         bulletAppState.setDebugEnabled(true);
         playerInputState.setPlayer(spaceship.getControl(SpaceshipControl.class));
         
@@ -119,20 +116,22 @@ public class Game1 extends AdvancedState {
         //TODO: initialize your AppState, e.g. attach spatials to rootNode
        
         //this is called on the OpenGL thread after the AppState has been attached
-        
-        cursorNode = createGameObject("Models/cursorCube.j3o",guiNode); 
+        System.out.println("initialize");
+        //cursorNode = createGameObject("Models/cursorCube.j3o",guiNode); 
+        startGame();
     }
     
     @Override
     public void update(float tpf) {
         //TODO: implement behavior during runtime
         Vector2f mousePos = inputManager.getCursorPosition();
-        cursorNode.setLocalTranslation(mousePos.x,mousePos.y,0);
+        //cursorNode.setLocalTranslation(mousePos.x,mousePos.y,0);
     }
     
     @Override
     public void cleanup() {
         super.cleanup();
+        quitGame();
         //TODO: clean up what you initialized in the initialize method,
         //e.g. remove all spatials from rootNode
         //this is called on the OpenGL thread after the AppState has been detached

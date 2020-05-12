@@ -72,8 +72,17 @@ public class MainMenuAppState extends AbstractAppState {
         title.setColor(ColorRGBA.White);
         QuadBackgroundComponent bg = new QuadBackgroundComponent();
         bg.setColor(ColorRGBA.White);
-        title.setBackground(bg);
-        title.setIcon(new IconComponent("Image.jpeg"));
+        if(DemoApplication.hasLoggedIn()){
+            title.setIcon(null);
+            title.setBackground(null);
+            title.setText("Log in successfully");
+            guiNode.attachChild(startButton);
+        }
+        else{
+            title.setBackground(bg);
+            title.setIcon(new IconComponent("Image.jpeg"));
+        }
+        
         guiNode.attachChild(title);
     }
     public void OnStartButtonClickListener()

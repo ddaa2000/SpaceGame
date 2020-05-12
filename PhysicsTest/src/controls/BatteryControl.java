@@ -46,6 +46,7 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
     @Override
     public void controlUpdate(float tpf)
     {
+        spatial.lookAt(spaceship.getWorldTranslation(), new Vector3f(0,1,0));
         super.controlUpdate(tpf);
         if(counter>0)
             counter-=tpf;
@@ -111,7 +112,7 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
         bullet.setLocalScale(1);
         bullet.lookAt(spaceship.getWorldTranslation(), new Vector3f(0,1,0));
         tempControl.setPhysics(gameMain.bulletAppState);
-        tempControl.setLinearVelocityLocal(0, 0, 50);
+        tempControl.setLinearVelocityLocal(0, 0, 200);
         
         
     }

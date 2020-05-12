@@ -7,13 +7,17 @@ package controls;
 
 import ConstAndMethods.CollisionMasks;
 import ConstAndMethods.Types;
+import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 /**
@@ -45,6 +49,7 @@ public class BulletControl extends SimplePhysicsControl{
         rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_spaceshipBullet);
         
     }
+    
     
     @Override
     public void physicsInitialize()
