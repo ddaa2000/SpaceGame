@@ -5,6 +5,9 @@
  */
 package controls;
 
+import Data.SpaceshipData;
+import Data.IGameSavable;
+import Data.IData;
 import ConstAndMethods.CollisionMasks;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
@@ -15,6 +18,7 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.RenderManager;
@@ -25,13 +29,12 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import java.io.IOException;
-import interfaces.IPlayerControl;
 
 /**
  *
  * @author ddaa
  */
-public class SpaceshipControl extends SimplePhysicsControl implements IPlayerControl {
+public class SpaceshipControl extends SimplePhysicsControl implements IPlayerControl,IGameSavable {
     //Any local variables should be encapsulated by getters/setters so they
     //appear in the SDK properties window and can be edited.
     //Right-click a local variable to encapsulate it with getters and setters.
@@ -43,7 +46,7 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     private static final float angularDamping = 0.4f;
     private static final float linearDamping = 0.5f;
     private static final float normalAcceleration = 10f;
-    private static final float coolingDownTime = 0.5f;
+    private static final float coolingDownTime = 0.2f;
     private float counter = coolingDownTime;
     private boolean CanShoot = true;
     
@@ -137,11 +140,40 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
             bullet.setLocalRotation(spatial.getLocalRotation());
             tempControl.setPhysics(gameMain.bulletAppState);
             tempControl.setAsSpaceshipBullet();
-            tempControl.setLinearVelocityLocal(0,0,200);         
+            tempControl.setLinearVelocityLocal(0,0,400);         
             counter = coolingDownTime;
         }
 
     }
+    
+    @Override
+    public IData save(){
+        SpaceshipData tmp = new SpaceshipData();
+        tmp.translation = rigidBodyControl.getPhysicsLocation();
+        tmp.rotation = rigidBodyControl.getPhysicsRotation();
+        tmp.linearvelocity = rigidBodyControl.getLinearVelocity();
+        tmp.angularvelocity = rigidBodyControl.getAngularVelocity();
+        tmp.life = life;
+        tmp.counter = counter;
+        tmp.CanShoot = CanShoot;
+        System.out.println("save");
+        return tmp;
+       
+    }
+    
+    @Override
+    public void load(IData data){
+        SpaceshipData tmp = (SpaceshipData)data;
+        rigidBodyControl.setPhysicsLocation(tmp.translation);
+        rigidBodyControl.setPhysicsRotation(tmp.rotation);
+        rigidBodyControl.setLinearVelocity(tmp.linearvelocity);
+        rigidBodyControl.setAngularVelocity(tmp.angularvelocity);
+        life = tmp.life;
+        counter = tmp.counter;
+        CanShoot = tmp.CanShoot;
+         System.out.println("load");
+    }
+    
     public void damage(){
         life -= 1;
         if(life == 0){

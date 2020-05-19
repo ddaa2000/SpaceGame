@@ -9,7 +9,9 @@ package Data;
  *
  * @author ddaa
  */
-public class SavedGame {
+public class SavedGame implements IData {
     public int playedTimes = 0;
     public int playerTimes2 = 0;
+    
+    public SpaceshipData spaceshipData = new SpaceshipData();
 }

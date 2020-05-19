@@ -13,7 +13,7 @@ import com.jme3.input.InputManager;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
-import interfaces.IPlayerControl;
+import controls.IPlayerControl;
 import mygame.Main;
 
 /**

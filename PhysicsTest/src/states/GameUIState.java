@@ -41,7 +41,6 @@ public class GameUIState extends AbstractAppState {
     SimpleApplication app;
     MyButton quitButton,saveButton;
     AppSettings settings;
-    Label title;
     SavedGame savedGame =new SavedGame();
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -64,16 +63,17 @@ public class GameUIState extends AbstractAppState {
         });
         quitButton.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
         
-        savedGame = loadGame();
+      //  savedGame = loadGame();
         
-        title = new Label("this is the "+savedGame.playedTimes+" time you play this game");
+    /*    title = new Label("this is the "+savedGame.playedTimes+" time you play this game");
         title.setPreferredSize(new Vector3f(600,500,0));
         title.setFontSize(60);
         title.setTextHAlignment(HAlignment.Center);
         title.setTextVAlignment(VAlignment.Center);
         title.setLocalTranslation(settings.getWidth()/2-250, settings.getHeight()/2+300, 0);
-        guiNode.attachChild(title);
+        guiNode.attachChild(title);*/
     }
+    
     public void saveGame(SavedGame savedGame){
         try {
             savedGame.playedTimes++;
@@ -100,7 +100,7 @@ public class GameUIState extends AbstractAppState {
     }
     public void OnQuitButtonClickListener()
     {
-        saveGame(savedGame);
+        ((Main)app).saveGame();
         
         ((Main)app).quitGame();
     }
@@ -117,7 +117,6 @@ public class GameUIState extends AbstractAppState {
         //e.g. remove all spatials from rootNode
         //this is called on the OpenGL thread after the AppState has been detached
         guiNode.detachChild(quitButton);
-        guiNode.detachChild(title);
         
     }
     

@@ -5,6 +5,11 @@
  */
 package states;
 
+import Data.SavedGame;
+import Data.SpaceshipData;
+import Exceptions.wrongUserInfoException;
+import Web.DemoApplication;
+import com.alibaba.fastjson.JSON;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -24,6 +29,8 @@ import controls.BatteryControl;
 import controls.CameraControl;
 import controls.RockControl;
 import controls.SpaceshipControl;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,12 +39,17 @@ import controls.SpaceshipControl;
 public class Game1 extends AdvancedState {
    
     private BulletAppState bulletAppState;
-    Spatial spaceship;
+    public Spatial spaceship;
     Spatial gameScene;
     PlayerInputState playerInputState;
     Spatial cursorNode;
     Node Floor;
     RigidBodyControl testFloor;
+    boolean shouldLoadGame = false;
+    
+    public void setLoadGame(boolean shouldLoadGame){
+        this.shouldLoadGame = shouldLoadGame;
+    }
     
     /**
      * use this to simplify creating gameObject from assets
@@ -80,7 +92,7 @@ public class Game1 extends AdvancedState {
         ((Node)spaceship).getChild("Camera").getControl(CameraControl.class).setCamera(cam);
         
 
-        bulletAppState.setDebugEnabled(true);
+       // bulletAppState.setDebugEnabled(true);
         playerInputState.setPlayer(spaceship.getControl(SpaceshipControl.class));
         
         
@@ -104,7 +116,38 @@ public class Game1 extends AdvancedState {
             cannon.getControl(BatteryControl.class).setSpaceship(spaceship);
             
         }
+        if(shouldLoadGame)
+            loadGame();
     }    
+    
+    public void saveGame(){
+        SavedGame savedGame = new SavedGame();
+        savedGame.spaceshipData = (SpaceshipData)spaceship.getControl(SpaceshipControl.class).save();
+        try {
+            savedGame.playedTimes++;
+            savedGame.playerTimes2+=2;
+            String presentData = JSON.toJSONString(savedGame);
+            DemoApplication.uploadData(presentData);
+        } catch (wrongUserInfoException ex) {
+            Logger.getLogger(GameUIState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void loadGame(){
+        SavedGame savedGame = new SavedGame();
+        try {
+            String previousData = DemoApplication.downloadData();
+            if(previousData!=null)
+                savedGame = JSON.parseObject(previousData, savedGame.getClass());
+            if(savedGame==null){
+                savedGame = new SavedGame();
+            }
+        } catch (wrongUserInfoException ex) {
+            Logger.getLogger(GameUIState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        spaceship.getControl(SpaceshipControl.class).load(savedGame.spaceshipData);
+    }
+    
     public AppSettings getSettings()
     {
         return settings;

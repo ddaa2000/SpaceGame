@@ -19,7 +19,7 @@ import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector2f;
 import com.jme3.system.AppSettings;
-import interfaces.IPlayerControl;
+import controls.IPlayerControl;
 import mygame.Main;
 
 /**

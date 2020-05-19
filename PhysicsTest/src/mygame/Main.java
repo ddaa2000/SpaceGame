@@ -1,5 +1,8 @@
 package mygame;
 
+import Data.SavedGame;
+import Data.SpaceshipData;
+import Exceptions.wrongUserInfoException;
 import Web.DemoApplication;
 import Web.Result;
 import cn.ac.mryao.http.HttpUtil;
@@ -87,7 +90,6 @@ public class Main extends SimpleApplication {
     {
         stateManager.detach(gameUI);
         stateManager.attach(mainMenu);
-       // game.quitGame();
         stateManager.detach(game);
         
     }
@@ -95,9 +97,22 @@ public class Main extends SimpleApplication {
     {
         stateManager.detach(mainMenu);
         stateManager.attach(gameUI);
+        game.setLoadGame(false);
         stateManager.attach(game);
-       // game.startGame();
     }
+    
+    public void loadGame(){
+        stateManager.detach(mainMenu);
+        stateManager.attach(gameUI);
+        game.setLoadGame(true);
+        stateManager.attach(game);
+    }
+    
+    public void saveGame(){
+        if(game!=null && game.isInitialized())
+            game.saveGame();
+    }
+    
     public AppSettings getSettings()
     {
         return settings;
