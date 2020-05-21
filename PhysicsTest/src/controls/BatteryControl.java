@@ -61,6 +61,38 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
     public void damage(){
         life -= 1;
         if(life == 0){
+            for(int i = 0;i<10;i++){
+                if(spatial.getParent()!=null){
+                    Node particleEffect = new Node();
+                    ParticleEffectControl control = new ParticleEffectControl();
+                    control.setGameMain(gameMain);
+                    particleEffect.addControl(control);
+                    spatial.getParent().attachChild(particleEffect);
+                    
+                    control.startDelay = (float)Math.random()*0.5f;
+                    Vector3f location = spatial.getLocalTranslation();
+                    location.x += Math.random()*5-2.5;
+                    location.y += Math.random()*5-2.5;
+                    location.z += Math.random()*5-2.5;
+                    particleEffect.setLocalTranslation(spatial.getLocalTranslation());
+                }
+            }
+            for(int i = 0;i<10;i++){
+                if(spatial.getParent()!=null){
+                    Node particleEffect = new Node();
+                    ParticleEffectControl control = new ParticleEffectControl();
+                    control.setGameMain(gameMain);
+                    particleEffect.addControl(control);
+                    spatial.getParent().attachChild(particleEffect);
+                    
+                    control.startDelay = (float)Math.random()*1.5f;
+                    Vector3f location = spatial.getLocalTranslation();
+                    location.x += Math.random()*5-2.5;
+                    location.y += Math.random()*5-2.5;
+                    location.z += Math.random()*5-2.5;
+                    particleEffect.setLocalTranslation(spatial.getLocalTranslation());
+                }
+            }
             this.removeSelfObject();
         }
     }
