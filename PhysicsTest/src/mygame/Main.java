@@ -66,6 +66,10 @@ public class Main extends SimpleApplication {
     MainMenuAppState mainMenu;
     GameUIState gameUI;
     
+    public GameUIState getGameUIState(){
+        return gameUI;
+    }
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -99,6 +103,11 @@ public class Main extends SimpleApplication {
         stateManager.attach(gameUI);
         game.setLoadGame(false);
         stateManager.attach(game);
+    }
+    
+    public void restartGame(){
+        quitGame();
+        startGame();
     }
     
     public void loadGame(){

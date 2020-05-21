@@ -46,9 +46,68 @@ public class Game1 extends AdvancedState {
     Node Floor;
     RigidBodyControl testFloor;
     boolean shouldLoadGame = false;
+    public int diff = 1;
     
     public void setLoadGame(boolean shouldLoadGame){
         this.shouldLoadGame = shouldLoadGame;
+    }
+    
+    private void rockAndCannonInit(int diff){
+        int rockNum = 0, cannonNum = 0;
+        switch(diff){
+            case 0:
+                rockNum = 30;
+                cannonNum = 10;
+                break;
+            case 1:
+                rockNum = 60;
+                cannonNum = 20;
+                break;
+            case 2:
+                rockNum = 100;
+                cannonNum = 30;
+                break;
+        }
+        //Rock init
+        for(int i = 0;i<rockNum;i++)
+        {
+            Spatial rock = createGameObject("Models/rock/rock.j3o",(Node)gameScene);
+            float randomScale = (float)Math.random()*6+3;
+            
+            rock.setLocalScale(new Vector3f(randomScale,randomScale,randomScale));
+            rock.setLocalTranslation((float)Math.random()*300, (float)Math.random()*300, (float)Math.random()*300);
+            
+            rock.getControl(RockControl.class).setPhysics(bulletAppState);
+            
+        }
+        
+        
+        int[] cannonLoc = {                    //30points in total
+            0,0,0,    50,0,50,   100,0,100,    //9points
+            0,50,50,  50,50,100, 100,50,0,
+            0,100,100,50,100,0,  100,100,50,
+            
+            50, 50, 50,                         //center point
+            
+            25,0,25,  25,0,75,   75,0,75,   75,0,25,  //12points
+            25,25,25, 25,25,75,  75,25,75,  75,25,25,
+            25,75,25, 25,75,75,  75,75,75,  75,75,25,
+            25,100,25,25,100,75, 75,100,75, 75,100,25,
+            
+            25,25,0,  75,75,0,   75,25,100, 25,75,100, //8points
+            0,25,25,  0,75,75,   100,75,25, 100,25,75
+        };
+        
+        //Cannon init
+        for(int i = 0;i<cannonNum;i++)
+        {
+            Spatial cannon = createGameObject("Models/cannon.j3o",(Node)gameScene);
+            
+            cannon.setLocalTranslation((float)cannonLoc[3*i]+100, (float)cannonLoc[3*i+1]+100, (float)cannonLoc[3*i+2]+100);
+            cannon.getControl(BatteryControl.class).setPhysics(bulletAppState);
+            cannon.getControl(BatteryControl.class).setSpaceship(spaceship);
+            
+        }
     }
     
     /**
@@ -96,28 +155,10 @@ public class Game1 extends AdvancedState {
         playerInputState.setPlayer(spaceship.getControl(SpaceshipControl.class));
         
         
-        for(int i = 0;i<100;i++)
-        {
-            Spatial rock = createGameObject("Models/rock/rock.j3o",(Node)gameScene);
-            float randomScale = (float)Math.random()*2+1;
-            
-            rock.setLocalScale(new Vector3f(randomScale,randomScale,randomScale));
-            rock.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
-            
-            rock.getControl(RockControl.class).setPhysics(bulletAppState);
-            
-        }
-        for(int i = 0;i<30;i++)
-        {
-            Spatial cannon = createGameObject("Models/cannon.j3o",(Node)gameScene);
-            
-            cannon.setLocalTranslation((float)Math.random()*100+40, (float)Math.random()*100, (float)Math.random()*100+40);
-            cannon.getControl(BatteryControl.class).setPhysics(bulletAppState);
-            cannon.getControl(BatteryControl.class).setSpaceship(spaceship);
-            
-        }
         if(shouldLoadGame)
             loadGame();
+        else
+            rockAndCannonInit(diff);
     }    
     
     public void saveGame(){

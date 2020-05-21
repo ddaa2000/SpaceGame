@@ -74,6 +74,9 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
            counter-=tpf;
         float acceleration = normalAcceleration*tpf;
         applyImpulseLocal(0,0,acceleration);
+        if(gameMain.getGameUIState()!=null){
+            gameMain.getGameUIState().setLifeText(life);
+        }
     }
     
     @Override
