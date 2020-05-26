@@ -11,6 +11,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.TextureKey;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -47,7 +48,7 @@ public class MainMenuAppState extends AbstractAppState {
         offLineButton.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                OnStartButtonClickListener();
+                OnOffLineButtonClickListener();
             }
         });
         offLineButton.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
@@ -55,7 +56,7 @@ public class MainMenuAppState extends AbstractAppState {
         
         QR_code = new Label("");
         QR_code.setPreferredSize(new Vector3f(600,500,0));
-        QR_code.setFontSize(1);
+        QR_code.setFontSize(30);
         QR_code.setTextHAlignment(HAlignment.Center);
         QR_code.setTextVAlignment(VAlignment.Center);
         QR_code.setLocalTranslation(settings.getWidth()/2-300, settings.getHeight()/2+300, 0);
@@ -63,8 +64,24 @@ public class MainMenuAppState extends AbstractAppState {
         QuadBackgroundComponent bg = new QuadBackgroundComponent();
         bg.setColor(ColorRGBA.White);
         QR_code.setBackground(bg);
-        QR_code.setText(null);
-        QR_code.setIcon(new IconComponent("Image.jpeg"));
+        if(!Main.offLineMode){
+            QR_code.setText(null);
+            IconComponent iconComponent = null;
+            try{
+                ((Main)app).loadQRAsset();
+                iconComponent = new IconComponent("Image.jpeg");
+            }catch(Exception ex){
+                QR_code.setText("cannot connect to the server, you can still play offline");
+                QR_code.setBackground(null);
+                Main.offLineMode = true;
+            }
+            QR_code.setIcon(iconComponent);
+        }
+        else{
+            QR_code.setText("cannot connect to the server, you can still play offline");
+            QR_code.setBackground(null);
+        }
+        
     }
     public void initializeMainPanel(){
         title = new Label("Space Battle");
@@ -134,6 +151,12 @@ public class MainMenuAppState extends AbstractAppState {
         guiNode.attachChild(startHard);
         guiNode.attachChild(gameLoad);
         guiNode.attachChild(title);
+        if(Main.offLineMode){
+            gameLoad.setEnabled(false);
+            gameLoad.setColor(ColorRGBA.Gray);
+        }
+        else
+            gameLoad.setEnabled(true);
         hideBasicPanel();
     }
     
@@ -164,6 +187,10 @@ public class MainMenuAppState extends AbstractAppState {
         
         //guiNode.attachChild(title);
     }
+    public void OnOffLineButtonClickListener(){
+        Main.offLineMode = true;
+        showMainPanel();
+    }
     public void OnStartButtonClickListener(){
         ((Main)app).startGame();
     }
@@ -171,9 +198,7 @@ public class MainMenuAppState extends AbstractAppState {
         ((Main)app).loadGame();
     }
     
-    public void OnOffLineButtonClickListener(){
-        
-    }
+
     
     @Override
     public void update(float tpf) {

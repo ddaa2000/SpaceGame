@@ -54,6 +54,7 @@ public class Game1 extends AdvancedState {
     
     private void rockAndCannonInit(int diff){
         int rockNum = 0, cannonNum = 0;
+        
         switch(diff){
             case 0:
                 rockNum = 30;
@@ -119,7 +120,7 @@ public class Game1 extends AdvancedState {
     
     public Spatial createGameObject(String name,Node parent)
     {
-        return gameApplication.createGameObject(name, parent);
+        return gameMain.createGameObject(name, parent);
     }
     
     public void quitGame()
@@ -138,7 +139,7 @@ public class Game1 extends AdvancedState {
         //initialize states
         playerInputState = new PlayerInputState();
         stateManager.attach(playerInputState);
-        bulletAppState = gameApplication.bulletAppState;
+        bulletAppState = gameMain.bulletAppState;
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0,0,0));
         
         //when delete or initialize, operate "gameScene"

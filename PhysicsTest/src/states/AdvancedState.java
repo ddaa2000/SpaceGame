@@ -22,7 +22,7 @@ import mygame.Main;
  */
 public abstract class AdvancedState extends AbstractAppState {
     
-    protected Main gameApplication;
+    protected Main gameMain;
     protected AppSettings settings;
     protected InputManager inputManager;
     protected Node guiNode,rootNode;
@@ -36,14 +36,14 @@ public abstract class AdvancedState extends AbstractAppState {
         super.initialize(stateManager, app);
         //TODO: initialize your AppState, e.g. attach spatials to rootNode
         //this is called on the OpenGL thread after the AppState has been attached
-        gameApplication = (Main)app;
-        settings = gameApplication.getSettings();
-        inputManager = gameApplication.getInputManager();
-        guiNode = gameApplication.getGuiNode();
-        rootNode = gameApplication.getRootNode();
-        this.stateManager = gameApplication.getStateManager();
-        assetManager = gameApplication.getAssetManager();
-        cam = gameApplication.getCamera();
+        gameMain = (Main)app;
+        settings = gameMain.getSettings();
+        inputManager = gameMain.getInputManager();
+        guiNode = gameMain.getGuiNode();
+        rootNode = gameMain.getRootNode();
+        this.stateManager = gameMain.getStateManager();
+        assetManager = gameMain.getAssetManager();
+        cam = gameMain.getCamera();
     }
     
     

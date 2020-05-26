@@ -10,6 +10,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
  * http工具类
@@ -18,9 +21,16 @@ import java.io.IOException;
  */
 public class HttpUtil {
 
-    private static final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private static final int timeout = 5;
+    private static final RequestConfig config = RequestConfig.custom()
+                                                .setConnectTimeout(timeout*1000)
+                                                .setConnectionRequestTimeout(timeout*1000)
+                                                .setSocketTimeout(timeout*1000).build();
+    private static final CloseableHttpClient httpClient = HttpClientBuilder.create()
+                                                        .setDefaultRequestConfig(config).build();
+    
 
-    public static String getForString(String uri) throws IOException {
+    public static String getForString(String uri) throws IOException,SocketTimeoutException {
         HttpGet httpGet = new HttpGet(uri);
         CloseableHttpResponse response = httpClient.execute(httpGet);
         HttpEntity entity = response.getEntity();
@@ -29,7 +39,7 @@ public class HttpUtil {
         return s;
     }
 
-    public static String postForString(String uri, String params) throws IOException {
+    public static String postForString(String uri, String params) throws IOException,SocketTimeoutException {
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setHeader("Content-type","application/json");
         StringEntity stringEntity = new StringEntity(params, "utf-8");

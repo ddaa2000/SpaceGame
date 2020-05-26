@@ -35,39 +35,7 @@ public class BulletControl extends SimplePhysicsControl{
     private float presentLifeTime = maxLifeTime;
     ParticleEmitter effect = null;
     
-   /* private float curTime = -1.0f;
-    private static final float fxTime = 0.5f;*/
-    
-  /*  @Override
-    public void initialize(){
-        super.initialize();
-        prepareEffect(gameMain.getAssetManager());
-    }
-    
-    private void prepareEffect(AssetManager assetManager) {
-        int COUNT_FACTOR = 1;
-        float COUNT_FACTOR_F = 1f;
-        effect = new ParticleEmitter("Flame", ParticleMesh.Type.Triangle, 32 * COUNT_FACTOR);
-        effect.setSelectRandomImage(true);
-        effect.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1f / COUNT_FACTOR_F)));
-        effect.setEndColor(new ColorRGBA(.4f, .22f, .12f, 0f));
-        effect.setStartSize(1.3f);
-        effect.setEndSize(2f);
-        effect.setShape(new EmitterSphereShape(Vector3f.ZERO, 1f));
-        effect.setParticlesPerSec(0);
-        effect.setGravity(0, -5f, 0);
-        effect.setLowLife(.4f);
-        effect.setHighLife(.5f);
-        effect.getParticleInfluencer()
-                .setInitialVelocity(new Vector3f(0, 7, 0));
-        effect.getParticleInfluencer().setVelocityVariation(1f);
-        effect.setImagesX(2);
-        effect.setImagesY(2);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/flame.png"));
-        effect.setMaterial(mat);
-        System.out.println("effect created");
-    }*/
+
     
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {

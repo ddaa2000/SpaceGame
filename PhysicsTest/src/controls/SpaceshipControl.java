@@ -42,19 +42,29 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     public int life = 1000;
     private static final float rotationFactor = 0.01f;
     private static final float planeRotationFactor = 0.02f;
-    private static final float speedFactor = 0.3f;
+    private static final float speedFactor = 2f;
+    private static final float slowFactor = 0.2f;
     private static final float angularDamping = 0.4f;
     private static final float linearDamping = 0.5f;
-    private static final float normalAcceleration = 10f;
+    private static final float normalAcceleration = 20f;
     private static final float coolingDownTime = 0.2f;
     private float counter = coolingDownTime;
     private boolean CanShoot = true;
+    
+    AudioNodeControl audioPlayerControl = null;
     
     @Override
     public void physicsInitialize()
     {
         rigidBodyControl.setCollisionGroup(CollisionMasks.group_spaceship);
         rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_spaceship);
+    }
+    
+    public void setAudio(){
+        audioPlayerControl = new AudioNodeControl();
+        audioPlayerControl.setGameMain(gameMain);
+        spatial.addControl(audioPlayerControl);
+        audioPlayerControl.setAudio("Sounds/shoot.wav",false, 1);
     }
     @Override
     public void initialize()
@@ -64,6 +74,10 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         setAngularDamping(angularDamping);
         setDamping(linearDamping);
         setBoxCollider(2,2,2);
+        setAudio();
+        
+        
+        
     }
     @Override
     protected void controlUpdate(float tpf) {
@@ -124,7 +138,7 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
 
     @Override
     public void speedDown(double strength) {
-        applyImpulseLocal(0,0,-(float)strength*speedFactor);
+        applyImpulseLocal(0,0,-(float)strength*slowFactor);
     }
 
     @Override
@@ -145,6 +159,7 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
             tempControl.setAsSpaceshipBullet();
             tempControl.setLinearVelocityLocal(0,0,400);         
             counter = coolingDownTime;
+            audioPlayerControl.playAudio();
         }
 
     }
@@ -174,13 +189,15 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         life = tmp.life;
         counter = tmp.counter;
         CanShoot = tmp.CanShoot;
-         System.out.println("load");
+        System.out.println("load");
+        setAudio(); 
     }
     
     public void damage(){
         life -= 1;
         if(life == 0){
             this.removeSelfObject();
+            gameMain.gameFailed();
         }
     }
 }

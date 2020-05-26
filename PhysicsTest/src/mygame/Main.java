@@ -54,6 +54,8 @@ import states.MainMenuAppState;
  */
 public class Main extends SimpleApplication {
 
+    public static boolean offLineMode = false;
+    
     public BulletAppState bulletAppState;
     Spatial spaceship;
     Spatial gameScene;
@@ -65,6 +67,23 @@ public class Main extends SimpleApplication {
     
     MainMenuAppState mainMenu;
     GameUIState gameUI;
+    
+    private Texture QR_code = null;
+    private TextureKey QR_key = null;
+    private byte[] QR_data = null;
+    
+    public void loadQRAsset(){
+        TextureKey key = new TextureKey("Image.jpeg");
+        ByteArrayInputStream stream = new ByteArrayInputStream(QR_data);
+        if(stream==null)
+            System.out.println("stream is null");
+        QR_code = assetManager.loadAssetFromStream(key, stream);
+        assetManager.addToCache(key, QR_code);
+    }
+    
+    public Texture getQRCode(){
+        return QR_code;
+    }
     
     public GameUIState getGameUIState(){
         return gameUI;
@@ -89,6 +108,17 @@ public class Main extends SimpleApplication {
         if(newObject.getControl(AdvancedControl.class)!=null)
             newObject.getControl(AdvancedControl.class).setGameMain(this);
         return newObject;
+    }
+    public void gameFailed()
+    {
+        stateManager.detach(gameUI);
+        stateManager.attach(mainMenu);
+        stateManager.detach(game);
+    }
+    public void victory(){
+        stateManager.detach(gameUI);
+        stateManager.attach(mainMenu);
+        stateManager.detach(game);
     }
     public void quitGame()
     {
@@ -129,24 +159,28 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
+        try{
+            DemoApplication.getAccessToken();
+        }catch(Exception ex){
+            offLineMode = true;
+        }
         
-        DemoApplication.getAccessToken();
         
-        byte[] data = null;
+       
         try
         {
-            data = DemoApplication.registerUser();
+            QR_data = DemoApplication.registerUser();
         }
         catch(IOException ex)
         {
-            ex.printStackTrace();
+            offLineMode = true;
         }
-        TextureKey key = new TextureKey("Image.jpeg");
-        ByteArrayInputStream stream = new ByteArrayInputStream(data);
-        if(stream==null)
-            System.out.println("stream is null");
-        Texture texture = assetManager.loadAssetFromStream(key, stream);
-        assetManager.addToCache(key, texture);
+        catch(Exception ex)
+        {
+            offLineMode = true;
+        }
+        
+        
         
         
         
