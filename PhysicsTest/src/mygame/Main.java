@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import states.Game1;
 import states.GameUIState;
 import states.MainMenuAppState;
+import states.SoundState;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -65,6 +66,7 @@ public class Main extends SimpleApplication {
     
     Game1 game;
     
+    SoundState soundState;
     MainMenuAppState mainMenu;
     GameUIState gameUI;
     
@@ -157,6 +159,10 @@ public class Main extends SimpleApplication {
         return settings;
     }
     
+    public SoundState getSoundState(){
+        return soundState;
+    }
+    
     @Override
     public void simpleInitApp() {
         try{
@@ -196,6 +202,8 @@ public class Main extends SimpleApplication {
         
         mainMenu = new MainMenuAppState();
         gameUI = new GameUIState();
+        soundState = new SoundState();
+        stateManager.attach(soundState);
         stateManager.attach(mainMenu);
         
         game = new Game1();

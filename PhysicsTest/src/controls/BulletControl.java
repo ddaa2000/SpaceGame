@@ -110,6 +110,7 @@ public class BulletControl extends SimplePhysicsControl{
             spatial.getParent().attachChild(particleEffect);
             particleEffect.setLocalTranslation(spatial.getLocalTranslation());
         }
+        gameMain.getSoundState().playSound("Sounds/shoot.wav");
         this.removeSelfObject(); 
     }
 }

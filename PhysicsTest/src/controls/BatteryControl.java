@@ -61,6 +61,7 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
     public void damage(){
         life -= 1;
         if(life == 0){
+            gameMain.getSoundState().playSound("Sounds/boom.wav");
             for(int i = 0;i<10;i++){
                 if(spatial.getParent()!=null){
                     Node particleEffect = new Node();
@@ -145,6 +146,7 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
         bullet.lookAt(spaceship.getWorldTranslation(), new Vector3f(0,1,0));
         tempControl.setPhysics(gameMain.bulletAppState);
         tempControl.setLinearVelocityLocal(0, 0, 200);
+        gameMain.getSoundState().playSound("Sounds/lazer.wav");
         
         
     }

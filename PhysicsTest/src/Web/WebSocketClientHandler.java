@@ -29,6 +29,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     private ChannelPromise handshakeFuture;
     public static boolean connected = false;
     public static int userId = -1;
+    public static String nickName = null;
 
     public WebSocketClientHandler(WebSocketClientHandshaker handshaker) {
         this.handshaker = handshaker;
@@ -90,7 +91,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 // 请在此处处理 用户已登录 事件
                 WxaPublicUserInfo wxaPublicUserInfo = JSON.parseObject(text, WxaPublicUserInfo.class);
                 Integer userId = wxaPublicUserInfo.getUserId();
-                String nickName = wxaPublicUserInfo.getNickName();
+                nickName = wxaPublicUserInfo.getNickName();
                 Integer gender = wxaPublicUserInfo.getGender();
                 String language = wxaPublicUserInfo.getLanguage();
                 String city = wxaPublicUserInfo.getCity();
@@ -114,6 +115,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 synchronized(DemoApplication.mutex){
                     DemoApplication.userInfo = new UserInfo();
                     DemoApplication.userInfo.userId = userId;
+                    DemoApplication.userInfo.nickName = nickName;
                 }
                 
                 

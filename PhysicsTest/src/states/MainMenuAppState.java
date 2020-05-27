@@ -39,6 +39,7 @@ public class MainMenuAppState extends AbstractAppState {
     MyButton startEasy,offLineButton,startMiddle,startHard,gameLoad;
     Label QR_code;
     Label title;
+    Label wechatName;
     AppSettings settings;
     
     public void initializeBasicPanel(){
@@ -90,6 +91,17 @@ public class MainMenuAppState extends AbstractAppState {
         title.setTextHAlignment(HAlignment.Center);
         title.setTextVAlignment(VAlignment.Center);
         title.setLocalTranslation(settings.getWidth()/2-300, settings.getHeight()/3*2+250, 0);
+        
+        wechatName = new Label("You are currently offline");
+        wechatName.setPreferredSize(new Vector3f(600,500,0));
+        wechatName.setFontSize(30);
+        wechatName.setTextHAlignment(HAlignment.Left);
+        wechatName.setTextVAlignment(VAlignment.Top);
+        wechatName.setLocalTranslation(0, settings.getHeight()-100, 0);
+        if(Main.offLineMode)
+            wechatName.setText("You are currently offline");
+        else if(DemoApplication.userInfo!=null)
+            wechatName.setText("Welcome! "+ DemoApplication.userInfo.nickName);
         
         startEasy = new MyButton("easy mode");
         startEasy.setFontSize(30);
@@ -151,6 +163,13 @@ public class MainMenuAppState extends AbstractAppState {
         guiNode.attachChild(startHard);
         guiNode.attachChild(gameLoad);
         guiNode.attachChild(title);
+        guiNode.attachChild(wechatName);
+        
+        if(Main.offLineMode)
+            wechatName.setText("You are currently offline");
+        else
+            wechatName.setText("Welcome! "+ DemoApplication.userInfo.nickName);
+        
         if(Main.offLineMode){
             gameLoad.setEnabled(false);
             gameLoad.setColor(ColorRGBA.Gray);
@@ -166,6 +185,7 @@ public class MainMenuAppState extends AbstractAppState {
         guiNode.detachChild(startHard);
         guiNode.detachChild(gameLoad);
         guiNode.detachChild(title);
+        guiNode.detachChild(wechatName);
         hideBasicPanel();
     }
     

@@ -51,7 +51,6 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     private float counter = coolingDownTime;
     private boolean CanShoot = true;
     
-    AudioNodeControl audioPlayerControl = null;
     
     @Override
     public void physicsInitialize()
@@ -60,12 +59,6 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         rigidBodyControl.setCollideWithGroups(CollisionMasks.mask_spaceship);
     }
     
-    public void setAudio(){
-        audioPlayerControl = new AudioNodeControl();
-        audioPlayerControl.setGameMain(gameMain);
-        spatial.addControl(audioPlayerControl);
-        audioPlayerControl.setAudio("Sounds/shoot.wav",false, 1);
-    }
     @Override
     public void initialize()
     {
@@ -74,7 +67,6 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         setAngularDamping(angularDamping);
         setDamping(linearDamping);
         setBoxCollider(2,2,2);
-        setAudio();
         
         
         
@@ -159,7 +151,7 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
             tempControl.setAsSpaceshipBullet();
             tempControl.setLinearVelocityLocal(0,0,400);         
             counter = coolingDownTime;
-            audioPlayerControl.playAudio();
+            gameMain.getSoundState().playSound("Sounds/lazer.wav");
         }
 
     }
@@ -190,7 +182,6 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
         counter = tmp.counter;
         CanShoot = tmp.CanShoot;
         System.out.println("load");
-        setAudio(); 
     }
     
     public void damage(){

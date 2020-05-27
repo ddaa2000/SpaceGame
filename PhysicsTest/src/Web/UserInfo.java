@@ -11,4 +11,5 @@ package Web;
  */
 public class UserInfo {
     public int userId = -1;
+    public String nickName = null;
 }
