@@ -93,11 +93,11 @@ public class MainMenuAppState extends AbstractAppState {
         title.setLocalTranslation(settings.getWidth()/2-300, settings.getHeight()/3*2+250, 0);
         
         wechatName = new Label("You are currently offline");
-        wechatName.setPreferredSize(new Vector3f(600,500,0));
+        wechatName.setPreferredSize(new Vector3f(600,250,0));
         wechatName.setFontSize(30);
         wechatName.setTextHAlignment(HAlignment.Left);
         wechatName.setTextVAlignment(VAlignment.Top);
-        wechatName.setLocalTranslation(0, settings.getHeight()-100, 0);
+        wechatName.setLocalTranslation(0, settings.getHeight(), 0);
         if(Main.offLineMode)
             wechatName.setText("You are currently offline");
         else if(DemoApplication.userInfo!=null)
@@ -109,7 +109,7 @@ public class MainMenuAppState extends AbstractAppState {
         startEasy.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                OnStartButtonClickListener();
+                OnStartButtonClickListener(0);
             }
         });
         startEasy.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
@@ -120,7 +120,7 @@ public class MainMenuAppState extends AbstractAppState {
         startMiddle.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                OnStartButtonClickListener();
+                OnStartButtonClickListener(1);
             }
         });
         startMiddle.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2-100);
@@ -131,7 +131,7 @@ public class MainMenuAppState extends AbstractAppState {
         startHard.addClickCommands(new Command<Button>() {
             @Override
             public void execute( Button source ) {
-                OnStartButtonClickListener();
+                OnStartButtonClickListener(2);
             }
         });
         startHard.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2-200);
@@ -211,8 +211,8 @@ public class MainMenuAppState extends AbstractAppState {
         Main.offLineMode = true;
         showMainPanel();
     }
-    public void OnStartButtonClickListener(){
-        ((Main)app).startGame();
+    public void OnStartButtonClickListener(int diff){
+        ((Main)app).startGame(diff);
     }
     public void OnLoadButtonClickListener(){
         ((Main)app).loadGame();

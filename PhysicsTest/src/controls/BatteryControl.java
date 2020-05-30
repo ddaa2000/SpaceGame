@@ -6,6 +6,10 @@
 package controls;
 
 import ConstAndMethods.CollisionMasks;
+import Data.BatteryData;
+import Data.IData;
+import Data.IGameSavable;
+import Data.SpaceshipData;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
@@ -27,7 +31,7 @@ import mygame.Main;
  *
  * @author myx36
  */
-public class BatteryControl extends AdvancedControl implements PhysicsCollisionListener{
+public class BatteryControl extends AdvancedControl implements PhysicsCollisionListener,IGameSavable{
     public int life = 10;
     public float distance = 1000;
     Spatial spaceship = null; 
@@ -35,7 +39,7 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
     RigidBodyControl rigidbodyControl = null;
     private float boundary = 10;
     
-    private static final float coolingDownTime = 10f;
+    private static final float coolingDownTime = 5f;
     private float counter = coolingDownTime;
     
     
@@ -52,7 +56,7 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
             counter-=tpf;
         else if(spaceship!=null && spaceshipInRange())
         {
-            counter = coolingDownTime;
+            counter = coolingDownTime-counter;
             shoot();
         }
             
@@ -113,6 +117,8 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
         if(rigidbodyControl==null)
             rigidbodyControl = new RigidBodyControl(0);
         rigidbodyControl.setCollisionShape(new SphereCollisionShape(boundary));
+        counter = (float)Math.random()*coolingDownTime;
+        System.out.println(""+counter);
     }
     
     public void setSpaceship(Spatial spaceship){
@@ -144,6 +150,8 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
         bullet.setLocalTranslation(spatial.getLocalTranslation());
         bullet.setLocalScale(1);
         bullet.lookAt(spaceship.getWorldTranslation(), new Vector3f(0,1,0));
+        if(gameMain.getGame()!= null)
+            gameMain.getGame().addBullet(bullet);
         tempControl.setPhysics(gameMain.bulletAppState);
         tempControl.setLinearVelocityLocal(0, 0, 200);
         gameMain.getSoundState().playSound("Sounds/lazer.wav");
@@ -157,6 +165,28 @@ public class BatteryControl extends AdvancedControl implements PhysicsCollisionL
                 FastMath.pow((ship.y - battery.y),2)+
                 FastMath.pow((ship.z - battery.z),2));
         return dis <= distance;
+    }
+    
+        @Override
+    public IData save(){
+        BatteryData tmp = new BatteryData();
+        tmp.location = rigidbodyControl.getPhysicsLocation();
+        tmp.rotation = rigidbodyControl.getPhysicsRotation();
+        tmp.life = life;
+        tmp.counter = counter;
+        System.out.println("save");
+        return tmp;
+       
+    }
+    
+    @Override
+    public void load(IData data){
+        BatteryData tmp = (BatteryData)data;
+        rigidbodyControl.setPhysicsLocation(tmp.location);
+        rigidbodyControl.setPhysicsRotation(tmp.rotation);
+        life = tmp.life;
+        counter = tmp.counter;
+        System.out.println("load");
     }
 
 

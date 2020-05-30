@@ -7,6 +7,10 @@ package controls;
 
 import ConstAndMethods.CollisionMasks;
 import ConstAndMethods.Types;
+import Data.BulletData;
+import Data.IData;
+import Data.IGameSavable;
+import Data.SpaceshipData;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
@@ -27,7 +31,7 @@ import com.jme3.scene.Spatial;
  *
  * @author myx36
  */
-public class BulletControl extends SimplePhysicsControl{
+public class BulletControl extends SimplePhysicsControl implements IGameSavable{
     //public float velocity = 20;
     public boolean isEnemyBullet = true;
     public static final float radius = 3f;
@@ -112,5 +116,31 @@ public class BulletControl extends SimplePhysicsControl{
         }
         gameMain.getSoundState().playSound("Sounds/shoot.wav");
         this.removeSelfObject(); 
+    }
+    
+        @Override
+    public IData save(){
+        BulletData tmp = new BulletData();
+        tmp.isEnemyData = isEnemyBullet;
+        tmp.translation = rigidBodyControl.getPhysicsLocation();
+        tmp.rotation = rigidBodyControl.getPhysicsRotation();
+        tmp.linearvelocity = rigidBodyControl.getLinearVelocity();
+        tmp.angularvelocity = rigidBodyControl.getAngularVelocity();
+        System.out.println("save");
+        return tmp;
+       
+    }
+    
+    @Override
+    public void load(IData data){
+        BulletData tmp = (BulletData)data;
+        rigidBodyControl.setPhysicsLocation(tmp.translation);
+        rigidBodyControl.setPhysicsRotation(tmp.rotation);
+        rigidBodyControl.setLinearVelocity(tmp.linearvelocity);
+        rigidBodyControl.setAngularVelocity(tmp.angularvelocity);
+        if(!tmp.isEnemyData)
+            setAsSpaceshipBullet();
+        
+        System.out.println("load");
     }
 }

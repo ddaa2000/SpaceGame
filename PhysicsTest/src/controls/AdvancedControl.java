@@ -30,6 +30,8 @@ public abstract class AdvancedControl extends AbstractControl {
 
     boolean initialized = false;
     
+    boolean destroyed = false;
+    
     protected Main gameMain = null;
     
     public void setGameMain(Main gameMain)
@@ -63,7 +65,11 @@ public abstract class AdvancedControl extends AbstractControl {
     }
     public void removeSelfObject()
     {
+        destroyed = true;
         spatial.removeFromParent();
+    }
+    public boolean isDestroyed(){
+        return destroyed;
     }
     
    

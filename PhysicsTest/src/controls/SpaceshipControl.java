@@ -39,7 +39,7 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
     //appear in the SDK properties window and can be edited.
     //Right-click a local variable to encapsulate it with getters and setters.
 
-    public int life = 1000;
+    public int life = 100;
     private static final float rotationFactor = 0.01f;
     private static final float planeRotationFactor = 0.02f;
     private static final float speedFactor = 2f;
@@ -152,6 +152,8 @@ public class SpaceshipControl extends SimplePhysicsControl implements IPlayerCon
             tempControl.setLinearVelocityLocal(0,0,400);         
             counter = coolingDownTime;
             gameMain.getSoundState().playSound("Sounds/lazer.wav");
+            if(gameMain.getGame()!= null)
+                gameMain.getGame().addBullet(bullet);
         }
 
     }

@@ -6,6 +6,10 @@
 package controls;
 
 import ConstAndMethods.CollisionMasks;
+import Data.IData;
+import Data.IGameSavable;
+import Data.RockData;
+import Data.SpaceshipData;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -21,7 +25,7 @@ import java.io.IOException;
  *
  * @author ddaa
  */
-public class RockControl extends SimplePhysicsControl {
+public class RockControl extends SimplePhysicsControl implements IGameSavable {
     //Any local variables should be encapsulated by getters/setters so they
     //appear in the SDK properties window and can be edited.
     //Right-click a local variable to encapsulate it with getters and setters.
@@ -71,6 +75,30 @@ public class RockControl extends SimplePhysicsControl {
         OutputCapsule out = ex.getCapsule(this);
         //TODO: save properties of this Control, e.g.
         //out.write(this.value, "name", defaultValue);
+    }
+
+    @Override
+    public IData save(){
+        RockData tmp = new RockData();
+        tmp.translation = rigidBodyControl.getPhysicsLocation();
+        tmp.rotation = rigidBodyControl.getPhysicsRotation();
+        tmp.linearvelocity = rigidBodyControl.getLinearVelocity();
+        tmp.angularvelocity = rigidBodyControl.getAngularVelocity();
+        tmp.scale = spatial.getLocalScale();
+        System.out.println("save");
+        return tmp;
+       
+    }
+    
+    @Override
+    public void load(IData data){
+        RockData tmp = (RockData)data;
+        rigidBodyControl.setPhysicsLocation(tmp.translation);
+        rigidBodyControl.setPhysicsRotation(tmp.rotation);
+        rigidBodyControl.setLinearVelocity(tmp.linearvelocity);
+        rigidBodyControl.setAngularVelocity(tmp.angularvelocity);
+        spatial.setLocalScale(tmp.scale);
+        System.out.println("load");
     }
     
 }

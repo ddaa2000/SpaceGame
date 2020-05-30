@@ -1,10 +1,11 @@
 package mygame;
 
-import Data.SavedGame;
+import Data.GameData;
 import Data.SpaceshipData;
 import Exceptions.wrongUserInfoException;
 import Web.DemoApplication;
 import Web.Result;
+import Web.WebSocketClient;
 import cn.ac.mryao.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -57,6 +58,7 @@ public class Main extends SimpleApplication {
 
     public static boolean offLineMode = false;
     
+    
     public BulletAppState bulletAppState;
     Spatial spaceship;
     Spatial gameScene;
@@ -94,6 +96,12 @@ public class Main extends SimpleApplication {
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
+        try{
+            WebSocketClient.group.shutdownGracefully();
+        }
+        catch(Exception ex){
+        }
+        
     }
     
     /**
@@ -113,37 +121,45 @@ public class Main extends SimpleApplication {
     }
     public void gameFailed()
     {
-        stateManager.detach(gameUI);
-        stateManager.attach(mainMenu);
+        gameUI.gameOver();
         stateManager.detach(game);
     }
     public void victory(){
-        stateManager.detach(gameUI);
-        stateManager.attach(mainMenu);
+        gameUI.victory();
         stateManager.detach(game);
     }
     public void quitGame()
     {
+        mainMenu.showMainPanel();
+        mainMenu.setEnabled(true);
         stateManager.detach(gameUI);
-        stateManager.attach(mainMenu);
+        //stateManager.attach(mainMenu);
         stateManager.detach(game);
         
     }
-    public void startGame()
+    public void startGame(int diff)
     {
-        stateManager.detach(mainMenu);
-        stateManager.attach(gameUI);
+        
+        mainMenu.hideMainPanel();
+        mainMenu.setEnabled(false);
+        //stateManager.detach(mainMenu);
         game.setLoadGame(false);
+        game.diff = diff;
+        stateManager.attach(gameUI);
         stateManager.attach(game);
     }
     
     public void restartGame(){
+        mainMenu.hideMainPanel();
+        mainMenu.setEnabled(false);
         quitGame();
-        startGame();
+        startGame(game.diff);
     }
     
     public void loadGame(){
-        stateManager.detach(mainMenu);
+        mainMenu.hideMainPanel();
+        mainMenu.setEnabled(false);
+        //stateManager.detach(mainMenu);
         stateManager.attach(gameUI);
         game.setLoadGame(true);
         stateManager.attach(game);
@@ -154,6 +170,10 @@ public class Main extends SimpleApplication {
             game.saveGame();
     }
     
+    
+    public Game1 getGame(){
+        return game;
+    }
     public AppSettings getSettings()
     {
         return settings;

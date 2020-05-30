@@ -5,7 +5,7 @@
  */
 package states;
 
-import Data.SavedGame;
+import Data.GameData;
 import Exceptions.wrongUserInfoException;
 import Web.DemoApplication;
 import Web.Result;
@@ -41,10 +41,11 @@ public class GameUIState extends AbstractAppState {
     SimpleApplication app;
     MyButton quitButton,restartButton,menuButton,backButton;
     AppSettings settings;
-    SavedGame savedGame =new SavedGame();
+    GameData savedGame =new GameData();
     
     
     Label lifeLabel;
+    Label victoryLabel,gameOverLabel;
     
     public void setLifeText(int life){
         if(lifeLabel!= null)
@@ -107,19 +108,35 @@ public class GameUIState extends AbstractAppState {
                 OnMenuButtonClickListener();
             }
         });
-        menuButton.setLocalTranslation(settings.getWidth()-100, settings.getHeight()-50);
+        menuButton.setLocalTranslation(settings.getWidth()-100, settings.getHeight()+50);
         guiNode.attachChild(menuButton);
         
         quitButton.setLocalTranslation(settings.getWidth()/2, settings.getHeight()/2);
         
         lifeLabel = new Label("Space Battle");
-        lifeLabel.setPreferredSize(new Vector3f(600,500,0));
-        lifeLabel.setFontSize(100);
-        lifeLabel.setTextHAlignment(HAlignment.Center);
-        lifeLabel.setTextVAlignment(VAlignment.Center);
-        lifeLabel.setLocalTranslation(settings.getWidth()/2-300, settings.getHeight()/3*2+250, 0);
+        lifeLabel.setPreferredSize(new Vector3f(400,250,0));
+        lifeLabel.setFontSize(60);
+        lifeLabel.setTextHAlignment(HAlignment.Left);
+        lifeLabel.setTextVAlignment(VAlignment.Top);
+        lifeLabel.setLocalTranslation(0, settings.getHeight(), 0);
         
         guiNode.attachChild(lifeLabel);
+        
+        victoryLabel = new Label("Victory!");
+        victoryLabel.setPreferredSize(new Vector3f(600,500,0));
+        victoryLabel.setFontSize(100);
+        victoryLabel.setTextHAlignment(HAlignment.Center);
+        victoryLabel.setTextVAlignment(VAlignment.Center);
+        victoryLabel.setLocalTranslation(settings.getWidth()/2-300, settings.getHeight()/3*2+250, 0);
+        
+        gameOverLabel = new Label("Game Over");
+        gameOverLabel.setPreferredSize(new Vector3f(600,500,0));
+        gameOverLabel.setFontSize(100);
+        gameOverLabel.setTextHAlignment(HAlignment.Center);
+        gameOverLabel.setTextVAlignment(VAlignment.Center);
+        gameOverLabel.setLocalTranslation(settings.getWidth()/2-300, settings.getHeight()/3*2+250, 0);
+        
+        
       //  savedGame = loadGame();
         
     /*    title = new Label("this is the "+savedGame.playedTimes+" time you play this game");
@@ -131,30 +148,28 @@ public class GameUIState extends AbstractAppState {
         guiNode.attachChild(title);*/
     }
     
-    public void saveGame(SavedGame savedGame){
+    /*public void saveGame(GameData savedGame){
         try {
-            savedGame.playedTimes++;
-            savedGame.playerTimes2+=2;
             String presentData = JSON.toJSONString(savedGame);
             DemoApplication.uploadData(presentData);
         } catch (wrongUserInfoException ex) {
             Logger.getLogger(GameUIState.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public SavedGame loadGame(){
-        SavedGame savedGame = new SavedGame();
+    public GameData loadGame(){
+        GameData savedGame = new GameData();
         try {
             String previousData = DemoApplication.downloadData();
             if(previousData!=null)
                 savedGame = JSON.parseObject(previousData, savedGame.getClass());
             if(savedGame==null){
-                savedGame = new SavedGame();
+                savedGame = new GameData();
             }
         } catch (wrongUserInfoException ex) {
             Logger.getLogger(GameUIState.class.getName()).log(Level.SEVERE, null, ex);
         }
         return savedGame;
-    }
+    }*/
     
     private void showMenu(){
         guiNode.attachChild(menuNode);
@@ -181,6 +196,24 @@ public class GameUIState extends AbstractAppState {
         showMenu();
     }
     
+    public void victory(){
+        guiNode.detachChild(lifeLabel);
+        guiNode.detachChild(menuButton);
+        guiNode.attachChild(victoryLabel);
+        menuNode.detachChild(quitButton);
+        guiNode.attachChild(quitButton);
+        guiNode.detachChild(menuNode);
+    }
+    
+     public void gameOver(){
+        guiNode.detachChild(lifeLabel);
+        guiNode.attachChild(gameOverLabel);
+        guiNode.detachChild(menuButton);
+        menuNode.detachChild(quitButton);
+        guiNode.attachChild(quitButton);
+        guiNode.detachChild(menuNode);
+    }
+    
     @Override
     public void update(float tpf) {
         //TODO: implement behavior during runtime
@@ -195,6 +228,9 @@ public class GameUIState extends AbstractAppState {
         guiNode.detachChild(lifeLabel);
         guiNode.detachChild(menuButton);
         guiNode.detachChild(menuNode);
+        guiNode.detachChild(quitButton);
+        guiNode.detachChild(gameOverLabel);
+        guiNode.detachChild(victoryLabel);
         
     }
     
